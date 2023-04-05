@@ -1,0 +1,41 @@
+server:
+  port: 8088
+spring:
+  application:
+    name: data-dealth
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    type: com.zaxxer.hikari.HikariDataSource
+    url: jdbc:mysql://localhost:3306/risc-boot?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&useSSL=false&allowMultiQueries=true
+    username: root
+    password: 123abc
+    hikari:
+      minimum-idle: 5
+      maximum-pool-size: 5
+      auto-commit: true
+      idle-timeout: 30000
+      pool-name: MyHikariCP
+      max-lifetime: 1800000
+      connection-timeout: 30000
+      connection-test-query: select 1
+  servlet:
+    multipart:
+      enabled: true
+      file-size-threshold: 0
+      location:
+      max-file-size: 300MB
+      max-request-size: 300MB
+      resolve-lazily: false
+mybatis-plus:
+  mapper-locations: classpath:mapper/*.xml
+  configuration:
+    call-setters-on-nulls: true
+#线程池 
+thread:
+  pool:
+    core-pool-size: 5
+    max-pool-size: 200
+    queue-capacity: 10000000
+    keep-alive-seconds: 30
+    thread-name-prefix: Task_Service_Async_
+    allow-core-thread-time-out: false
