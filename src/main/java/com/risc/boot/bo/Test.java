@@ -10,12 +10,12 @@ import org.springframework.format.annotation.DateTimeFormat;
  * 测试表(Test)实体类
  *
  * @author 李良发
- * @since 2023-04-05 00:08:48
+ * @since 2023-05-06 17:44:56
  */
 @Data
 public class Test implements Serializable {
 
-    private static final long serialVersionUID = -54601172471177435L;
+    private static final long serialVersionUID = 936827648666701479L;
     
     /**
     * uid
