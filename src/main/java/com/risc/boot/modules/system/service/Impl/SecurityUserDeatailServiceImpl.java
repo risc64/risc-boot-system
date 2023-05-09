@@ -2,6 +2,7 @@ package com.risc.boot.modules.system.service.Impl;
 
 import com.risc.boot.modules.system.bo.SysPermission;
 import com.risc.boot.modules.system.bo.SysUser;
+import com.risc.boot.modules.system.dao.SysUserDao;
 import com.risc.boot.modules.system.service.SysPermissionService;
 import com.risc.boot.modules.system.service.SysUserService;
 import com.risc.boot.common.util.RedisUtil;
@@ -29,7 +30,7 @@ import java.util.stream.Collectors;
 public class SecurityUserDeatailServiceImpl implements UserDetailsService {
     
     @Resource
-    SysUserService sysUserService;
+    SysUserDao sysUserDao;
     
     @Resource
     SysPermissionService sysPermissionService;
@@ -39,7 +40,7 @@ public class SecurityUserDeatailServiceImpl implements UserDetailsService {
     
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        SysUser sysUser = sysUserService.selectByUserName(username);
+        SysUser sysUser = sysUserDao.selectByUserName(username);
         if (sysUser == null) {
             throw new UsernameNotFoundException("用户不存在");
         }

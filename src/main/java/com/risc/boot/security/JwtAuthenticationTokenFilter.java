@@ -1,7 +1,12 @@
 package com.risc.boot.security;
 
+import cn.hutool.json.JSONUtil;
+import com.risc.boot.common.bo.Result;
+import com.risc.boot.common.bo.SecurityUserDetails;
+import com.risc.boot.common.bo.StatusEnum;
 import com.risc.boot.common.util.JwtTokenUtil;
 import com.risc.boot.common.util.RedisUtil;
+import com.risc.boot.modules.system.service.Impl.SecurityUserDeatailServiceImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
@@ -30,15 +35,8 @@ import java.io.IOException;
 public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
 
     private Logger logger = LoggerFactory.getLogger(this.getClass());
-    
-    private final static String JWT_TOKEN_HEADER = "token";
 
     private final static String JWT_TOKEN_HEAD = "Bearer";
-
-    
-    
-    @Resource
-    UserDetailsService userDetailsService;
     
     @Resource
     JwtTokenUtil jwtTokenUtil;
@@ -48,21 +46,48 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
     
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        String authHeader = request.getHeader(JWT_TOKEN_HEADER);
-        if (authHeader != null && authHeader.startsWith(JWT_TOKEN_HEAD)) {
-            String authToken = authHeader.substring(JWT_TOKEN_HEAD.length());
-            String username = jwtTokenUtil.getUserNameFromToken(authToken);
-            logger.info("checking username:{}", username);
-            if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-                UserDetails userDetails = this.userDetailsService.loadUserByUsername(username);
-                if (jwtTokenUtil.validateToken(authToken, userDetails)) {
-                    UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
-                    authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-                    logger.info("authenticated user:{}", username);
-                    SecurityContextHolder.getContext().setAuthentication(authentication);
-                }
-            }
-        }
+
         filterChain.doFilter(request, response);
+        // 获取token
+        //String token = request.getHeader("token");
+        //if (token != null && token.startsWith(JWT_TOKEN_HEAD)) {
+        //    String authToken = token.substring(JWT_TOKEN_HEAD.length());
+        //    String username = jwtTokenUtil.getUserNameFromToken(authToken);
+        //    Object obj = redisUtil.get(username);
+        //    if (obj != null) {
+        //        String jsonStr = JSONUtil.toJsonPrettyStr(obj);
+        //        SecurityUserDetails userDetails = JSONUtil.toBean(jsonStr, SecurityUserDetails.class);
+        //        if (jwtTokenUtil.validateToken(authToken, userDetails)) {
+        //            UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+        //            authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+        //            logger.info("authenticated user:{}", username);
+        //            SecurityContextHolder.getContext().setAuthentication(authentication);
+        //            filterChain.doFilter(request, response);
+        //        } else {
+        //            Result<String> result = new Result<>();
+        //            result.setStatusEnum(StatusEnum.PERMISSION_DENIED, null);
+        //            response.setCharacterEncoding("UTF-8");
+        //            response.setContentType("application/json");
+        //            response.getWriter().println(JSONUtil.parse(result));
+        //            response.getWriter().flush();
+        //        }
+        //    } else {
+        //        Result<String> result = new Result<>();
+        //        result.setStatusEnum(StatusEnum.OVERDUEL, null);
+        //        response.setCharacterEncoding("UTF-8");
+        //        response.setContentType("application/json");
+        //        response.getWriter().println(JSONUtil.parse(result));
+        //        response.getWriter().flush();
+        //        response.getWriter().println();
+        //    }
+        //} else {
+        //    Result<String> result = new Result<>();
+        //    result.setStatusEnum(StatusEnum.OVERDUEL, null);
+        //    response.setCharacterEncoding("UTF-8");
+        //    response.setContentType("application/json");
+        //    response.getWriter().println(JSONUtil.parse(result));
+        //    response.getWriter().flush();
+        //    response.getWriter().println();
+        //}
     }
 }

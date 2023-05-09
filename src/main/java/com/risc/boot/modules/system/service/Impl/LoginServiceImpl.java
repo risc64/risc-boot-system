@@ -1,5 +1,6 @@
 package com.risc.boot.modules.system.service.Impl;
 
+import cn.hutool.json.JSONUtil;
 import com.risc.boot.common.bo.Result;
 import com.risc.boot.common.bo.SecurityUserDetails;
 import com.risc.boot.common.bo.StatusEnum;
@@ -64,7 +65,7 @@ public class LoginServiceImpl implements LoginService {
             } else {
                 List<SysPermission> sysPermissionList = sysPermissionService.selectByUserUid(t.getUserUid());
                 List<String> codeList = sysPermissionList.stream().map(e-> e.getPermissionCode()).collect(Collectors.toList());
-                redisUtil.set(t.getUserName(), StringUtils.join(codeList,","),8 * 60 * 60);
+                //redisUtil.set(t.getUserName(), StringUtils.join(codeList,","),8 * 60 * 60);
                 //List<GrantedAuthority> authorities = new ArrayList<>();
                 //sysPermissionList.forEach(sysPermission ->{
                 //    SimpleGrantedAuthority simpleGrantedAuthority = new SimpleGrantedAuthority(sysPermission.getPermissionCode());
@@ -78,6 +79,7 @@ public class LoginServiceImpl implements LoginService {
                 if (StringUtils.isNotBlank(token)) {
                     t.setToken(token);
                     result.setStatusEnum(StatusEnum.OK, t);
+                    redisUtil.set(t.getUserName(), JSONUtil.toJsonPrettyStr(securityUserDetails),8 * 60 * 60);
                 } else {
                     result.setStatusEnum(StatusEnum.ERROR, null);
                     result.setMsg("token 生成失败");

@@ -13,7 +13,7 @@ import org.springframework.context.annotation.Configuration;
  * @author nsg 2022-5-20
  */
 @Configuration
-@MapperScan("com.risc.boot.dao")
+@MapperScan("com.risc.boot.modules.**.dao")
 public class MyBatisPlusConfig {
     /**
      * 分页插件

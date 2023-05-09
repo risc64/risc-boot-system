@@ -52,14 +52,15 @@ thread:
 #安全路径白名单
 security:
   ignored:
-    - /actuator/**
-    - /static/**
-    - /login
-    - /swagger-ui/
-    - /swagger-resources/**
-    - /**/v2/api-docs
-    - /**/*.html
-    - /**/*.js
-    - /**/*.css
-    - /**/*.png
-    - /favicon.ico
+    urls:
+      - /actuator/**
+      - /static/**
+      - /login
+      - /swagger-ui/
+      - /swagger-resources/**
+      - /**/v2/api-docs
+      - /**/*.html
+      - /**/*.js
+      - /**/*.css
+      - /**/*.png
+      - /favicon.ico
