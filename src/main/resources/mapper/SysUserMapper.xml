@@ -1,0 +1,266 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.risc.boot.modules.system.dao.SysUserDao">
+
+    <resultMap type="com.risc.boot.modules.system.bo.SysUser" id="SysUserMap">
+        <result property="userUid" column="user_uid" jdbcType="VARCHAR"/>
+        <result property="userName" column="user_name" jdbcType="VARCHAR"/>
+        <result property="userNick" column="user_nick" jdbcType="VARCHAR"/>
+        <result property="passWord" column="pass_word" jdbcType="VARCHAR"/>
+        <result property="salt" column="salt" jdbcType="VARCHAR"/>
+        <result property="openUid" column="open_uid" jdbcType="VARCHAR"/>
+        <result property="sex" column="sex" jdbcType="INTEGER"/>
+        <result property="userStatus" column="user_status" jdbcType="INTEGER"/>
+        <result property="email" column="email" jdbcType="VARCHAR"/>
+        <result property="profilePicture" column="profile_picture" jdbcType="VARCHAR"/>
+        <result property="mobile" column="mobile" jdbcType="VARCHAR"/>
+        <result property="province" column="province" jdbcType="VARCHAR"/>
+        <result property="city" column="city" jdbcType="VARCHAR"/>
+        <result property="area" column="area" jdbcType="VARCHAR"/>
+        <result property="address" column="address" jdbcType="VARCHAR"/>
+        <result property="createUserUid" column="create_user_uid" jdbcType="VARCHAR"/>
+        <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+        <result property="updateUserUid" column="update_user_uid" jdbcType="VARCHAR"/>
+        <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <!-- 基本字段 -->
+    <sql id="Base_Column_List">
+        user_uid, user_name, user_nick, pass_word, salt, open_uid, sex, user_status, email, profile_picture, mobile, province, city, area, address, create_user_uid, create_time, update_user_uid, update_time    </sql>
+
+    <!--通过ID查询单条数据-->
+    <select id="selectByKey" resultMap="SysUserMap">
+        select
+        <include refid="Base_Column_List"/>
+        from sys_user
+        where user_uid = #{userUid}
+    </select>
+
+    <!--新增数据-->
+    <insert id="insert" keyProperty="userUid" useGeneratedKeys="true">
+        insert into sys_user(user_uid, user_name, user_nick, pass_word, salt, open_uid, sex, user_status, email, profile_picture, mobile, province, city, area, address, create_user_uid, create_time, update_user_uid, update_time)
+        values (#{userUid}, #{userName}, #{userNick}, #{passWord}, #{salt}, #{openUid}, #{sex}, #{userStatus}, #{email}, #{profilePicture}, #{mobile}, #{province}, #{city}, #{area}, #{address}, #{createUserUid}, #{createTime}, #{updateUserUid}, #{updateTime})
+    </insert>
+
+    <!--修改数据-->
+    <update id="update">
+        update sys_user
+        <set>
+            user_name = #{userName},
+            user_nick = #{userNick},
+            pass_word = #{passWord},
+            salt = #{salt},
+            open_uid = #{openUid},
+            sex = #{sex},
+            user_status = #{userStatus},
+            email = #{email},
+            profile_picture = #{profilePicture},
+            mobile = #{mobile},
+            province = #{province},
+            city = #{city},
+            area = #{area},
+            address = #{address},
+            create_user_uid = #{createUserUid},
+            create_time = #{createTime},
+            update_user_uid = #{updateUserUid},
+            update_time = #{updateTime}
+        </set>
+        where user_uid = #{userUid}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteByKey">
+        delete from sys_user 
+        where user_uid = #{userUid}
+    </delete>
+
+    <!--批量新增-->
+    <insert id="insertBatch" keyProperty="userUid" useGeneratedKeys="true">
+        insert into sys_user(user_uid, user_name, user_nick, pass_word, salt, open_uid, sex, user_status, email,
+        profile_picture, mobile, province, city, area, address, create_user_uid, create_time, update_user_uid,
+        update_time)
+        values
+        <foreach collection="list" item="item" separator=",">
+            (#{item.userUid},#{item.userName},#{item.userNick},#{item.passWord},#{item.salt},#{item.openUid},#{item.sex},#{item.userStatus},#{item.email},#{item.profilePicture},#{item.mobile},#{item.province},#{item.city},#{item.area},#{item.address},#{item.createUserUid},#{item.createTime},#{item.updateUserUid},#{item.updateTime})
+        </foreach>
+    </insert>
+
+    <!--批量删除-->
+    <delete id="deleteBatch">
+        delete from sys_user
+        where user_uid in
+        <foreach collection="list" item="item" separator="," open="(" close=")">
+            #{item}
+        </foreach>
+    </delete>
+
+    <!--条件查询 注意：修改此sql时须同时修改 分页查询Count ，并去掉不必要的外联、排序等，保证分页查询总页数正确 -->
+    <select id="selectByProperty" resultMap="SysUserMap">
+        select
+        <include refid="Base_Column_List"/>
+        from sys_user
+        <where>
+            <if test="record.userUid != null and record.userUid != ''">
+                and user_uid = #{record.userUid}
+            </if>
+            <if test="record.userName != null and record.userName != ''">
+                and user_name = #{record.userName}
+            </if>
+            <if test="record.userNick != null and record.userNick != ''">
+                and user_nick = #{record.userNick}
+            </if>
+            <if test="record.passWord != null and record.passWord != ''">
+                and pass_word = #{record.passWord}
+            </if>
+            <if test="record.salt != null and record.salt != ''">
+                and salt = #{record.salt}
+            </if>
+            <if test="record.openUid != null and record.openUid != ''">
+                and open_uid = #{record.openUid}
+            </if>
+            <if test="record.sex != null">
+                and sex = #{record.sex}
+            </if>
+            <if test="record.userStatus != null">
+                and user_status = #{record.userStatus}
+            </if>
+            <if test="record.email != null and record.email != ''">
+                and email = #{record.email}
+            </if>
+            <if test="record.profilePicture != null and record.profilePicture != ''">
+                and profile_picture = #{record.profilePicture}
+            </if>
+            <if test="record.mobile != null and record.mobile != ''">
+                and mobile = #{record.mobile}
+            </if>
+            <if test="record.province != null and record.province != ''">
+                and province = #{record.province}
+            </if>
+            <if test="record.city != null and record.city != ''">
+                and city = #{record.city}
+            </if>
+            <if test="record.area != null and record.area != ''">
+                and area = #{record.area}
+            </if>
+            <if test="record.address != null and record.address != ''">
+                and address = #{record.address}
+            </if>
+            <if test="record.createUserUid != null and record.createUserUid != ''">
+                and create_user_uid = #{record.createUserUid}
+            </if>
+            <if test="record.createTime != null">
+                and create_time = #{record.createTime}
+            </if>
+            <if test="record.updateUserUid != null and record.updateUserUid != ''">
+                and update_user_uid = #{record.updateUserUid}
+            </if>
+            <if test="record.updateTime != null">
+                and update_time = #{record.updateTime}
+            </if>
+        </where>
+    </select>
+
+    <!--分页查询Count-->
+    <select id="selectByPropertyCount" resultType="Long">
+        select
+        count(user_uid)
+        from sys_user
+        <where>
+            <if test="record.userUid != null and record.userUid != ''">
+                and user_uid = #{record.userUid}
+            </if>
+            <if test="record.userName != null and record.userName != ''">
+                and user_name = #{record.userName}
+            </if>
+            <if test="record.userNick != null and record.userNick != ''">
+                and user_nick = #{record.userNick}
+            </if>
+            <if test="record.passWord != null and record.passWord != ''">
+                and pass_word = #{record.passWord}
+            </if>
+            <if test="record.salt != null and record.salt != ''">
+                and salt = #{record.salt}
+            </if>
+            <if test="record.openUid != null and record.openUid != ''">
+                and open_uid = #{record.openUid}
+            </if>
+            <if test="record.sex != null">
+                and sex = #{record.sex}
+            </if>
+            <if test="record.userStatus != null">
+                and user_status = #{record.userStatus}
+            </if>
+            <if test="record.email != null and record.email != ''">
+                and email = #{record.email}
+            </if>
+            <if test="record.profilePicture != null and record.profilePicture != ''">
+                and profile_picture = #{record.profilePicture}
+            </if>
+            <if test="record.mobile != null and record.mobile != ''">
+                and mobile = #{record.mobile}
+            </if>
+            <if test="record.province != null and record.province != ''">
+                and province = #{record.province}
+            </if>
+            <if test="record.city != null and record.city != ''">
+                and city = #{record.city}
+            </if>
+            <if test="record.area != null and record.area != ''">
+                and area = #{record.area}
+            </if>
+            <if test="record.address != null and record.address != ''">
+                and address = #{record.address}
+            </if>
+            <if test="record.createUserUid != null and record.createUserUid != ''">
+                and create_user_uid = #{record.createUserUid}
+            </if>
+            <if test="record.createTime != null">
+                and create_time = #{record.createTime}
+            </if>
+            <if test="record.updateUserUid != null and record.updateUserUid != ''">
+                and update_user_uid = #{record.updateUserUid}
+            </if>
+            <if test="record.updateTime != null">
+                and update_time = #{record.updateTime}
+            </if>
+        </where>
+    </select>
+
+    <!--通过用户名查询单条数据-->
+    <select id="selectByUserName" resultMap="SysUserMap">
+        select
+        <include refid="Base_Column_List"/>
+        from sys_user
+        where user_name = #{userName}
+        limit 1
+    </select>
+    
+    <!--  Token  -->
+    <resultMap type="com.risc.boot.common.bo.Token" id="TokenMap">
+        <result property="userUid" column="user_uid" jdbcType="VARCHAR"/>
+        <result property="userName" column="user_name" jdbcType="VARCHAR"/>
+        <result property="userNick" column="user_nick" jdbcType="VARCHAR"/>
+        <result property="passWord" column="pass_word" jdbcType="VARCHAR"/>
+        <result property="openUid" column="open_uid" jdbcType="VARCHAR"/>
+        <result property="profilePicture" column="profile_picture" jdbcType="VARCHAR"/>
+        <result property="organizationUid" column="organization_uid" jdbcType="VARCHAR"/>
+        <result property="organizationName" column="organization_name" jdbcType="VARCHAR"/>
+        <result property="organizationCode" column="organization_code" jdbcType="VARCHAR"/>
+        <result property="roleUid" column="role_uid" jdbcType="VARCHAR"/>
+        <result property="roleName" column="role_name" jdbcType="VARCHAR"/>
+    </resultMap>
+    
+    
+    <select id="selectTokenByUserName" resultMap="TokenMap">
+        SELECT sys_user.user_uid, sys_user.user_name, sys_user.user_nick, sys_user.pass_word, sys_user.open_uid, , sys_user.profile_picture,
+        sys_role.role_uid, sys_role.role_name, sys_organization.organization_uid, sys_organization.organization_name, 
+        sys_organization.organization_code
+        FROM sys_user
+        LEFT JOIN sys_user_role on sys_user.user_uid = sys_user_role.user_uid
+        LEFT JOIN sys_role on sys_role.role_uid = sys_user_role.role_uid
+        LEFT JOIN sys_user_organization on sys_user.user_uid = sys_user_organization.organization_uid
+        LEFT JOIN sys_organization on sys_organization.organization_uid = sys_user_organization.organization_uid
+        WHERE user_name = #{userName}
+    </select>
+
+</mapper>

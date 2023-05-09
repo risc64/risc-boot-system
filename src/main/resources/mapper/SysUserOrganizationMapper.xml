@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.risc.boot.modules.system.dao.SysUserOrganizationDao">
+
+    <resultMap type="com.risc.boot.modules.system.bo.SysUserOrganization" id="SysUserOrganizationMap">
+        <result property="uerUid" column="uer_uid" jdbcType="VARCHAR"/>
+        <result property="organizationUid" column="organization_uid" jdbcType="VARCHAR"/>
+    </resultMap>
+    
+    <!-- 基本字段 -->
+    <sql id="Base_Column_List">
+        uer_uid, organization_uid    </sql>
+
+    <!--通过ID查询单条数据-->
+    <select id="selectByKey" resultMap="SysUserOrganizationMap">
+        select
+          <include refid="Base_Column_List" />
+        from sys_user_organization
+        where uer_uid = #{uerUid}
+    </select>
+    
+    <!--新增数据-->
+    <insert id="insert" keyProperty="uerUid" useGeneratedKeys="true">
+        insert into sys_user_organization(uer_uid, organization_uid)
+        values (#{uerUid}, #{organizationUid})
+    </insert>
+    
+    <!--修改数据-->
+    <update id="update">
+        update sys_user_organization
+        <set>
+                </set>
+        where uer_uid = #{uerUid}
+    </update>
+    
+    <!--通过主键删除-->
+    <delete id="deleteByKey">
+        delete from sys_user_organization 
+        where uer_uid = #{uerUid}
+    </delete>
+    
+    <!--批量新增-->
+    <insert id="insertBatch" keyProperty="uerUid" useGeneratedKeys="true">
+        insert into sys_user_organization(uer_uid, organization_uid)
+        values 
+        <foreach collection = "list" item = "item" separator = ",">
+        (#{item.uerUid},#{item.organizationUid})
+        </foreach>
+    </insert>
+    
+    <!--批量删除-->
+    <delete id="deleteBatch">
+        delete from sys_user_organization 
+        where uer_uid in
+        <foreach collection = "list" item = "item" separator = "," open = "(" close = ")">
+            #{item}
+        </foreach>
+    </delete>
+    
+    <!--条件查询 注意：修改此sql时须同时修改 分页查询Count ，并去掉不必要的外联、排序等，保证分页查询总页数正确 -->
+    <select id="selectByProperty" resultMap="SysUserOrganizationMap">
+        select
+          <include refid="Base_Column_List" />
+        from sys_user_organization
+        <where>
+                        <if test="record.uerUid != null and record.uerUid != ''">
+                and uer_uid = #{record.uerUid}
+            </if>
+                        <if test="record.organizationUid != null and record.organizationUid != ''">
+                and organization_uid = #{record.organizationUid}
+            </if>
+                    </where>
+    </select>
+    
+    <!--分页查询Count-->
+    <select id="selectByPropertyCount" resultType="Long">
+        select
+          count(uer_uid)
+        from sys_user_organization
+        <where>
+                        <if test="record.uerUid != null and record.uerUid != ''">
+                and uer_uid = #{record.uerUid}
+            </if>
+                        <if test="record.organizationUid != null and record.organizationUid != ''">
+                and organization_uid = #{record.organizationUid}
+            </if>
+                    </where>
+    </select>
+
+</mapper>

@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.risc.boot.modules.system.dao.SysRolePermissionDao">
+
+    <resultMap type="com.risc.boot.modules.system.bo.SysRolePermission" id="SysRolePermissionMap">
+        <result property="roleUid" column="role_uid" jdbcType="VARCHAR"/>
+        <result property="permissionUid" column="permission_uid" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <!-- 基本字段 -->
+    <sql id="Base_Column_List">
+        role_uid, permission_uid    </sql>
+
+    <!--通过ID查询单条数据-->
+    <select id="selectByKey" resultMap="SysRolePermissionMap">
+        select
+        <include refid="Base_Column_List"/>
+        from sys_role_permission
+        where role_uid = #{roleUid}
+    </select>
+
+    <!--新增数据-->
+    <insert id="insert" keyProperty="roleUid" useGeneratedKeys="true">
+        insert into sys_role_permission(role_uid, permission_uid)
+        values (#{roleUid}, #{permissionUid})
+    </insert>
+
+    <!--修改数据-->
+    <update id="update">
+        update sys_role_permission
+        <set>
+        </set>
+        where role_uid = #{roleUid}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteByKey">
+        delete from sys_role_permission 
+        where role_uid = #{roleUid}
+    </delete>
+
+    <!--批量新增-->
+    <insert id="insertBatch" keyProperty="roleUid" useGeneratedKeys="true">
+        insert into sys_role_permission(role_uid, permission_uid)
+        values
+        <foreach collection="list" item="item" separator=",">
+            (#{item.roleUid},#{item.permissionUid})
+        </foreach>
+    </insert>
+
+    <!--批量删除-->
+    <delete id="deleteBatch">
+        delete from sys_role_permission
+        where role_uid in
+        <foreach collection="list" item="item" separator="," open="(" close=")">
+            #{item}
+        </foreach>
+    </delete>
+
+    <!--条件查询 注意：修改此sql时须同时修改 分页查询Count ，并去掉不必要的外联、排序等，保证分页查询总页数正确 -->
+    <select id="selectByProperty" resultMap="SysRolePermissionMap">
+        select
+        <include refid="Base_Column_List"/>
+        from sys_role_permission
+        <where>
+            <if test="record.roleUid != null and record.roleUid != ''">
+                and role_uid = #{record.roleUid}
+            </if>
+            <if test="record.permissionUid != null and record.permissionUid != ''">
+                and permission_uid = #{record.permissionUid}
+            </if>
+        </where>
+    </select>
+
+    <!--分页查询Count-->
+    <select id="selectByPropertyCount" resultType="Long">
+        select
+        count(role_uid)
+        from sys_role_permission
+        <where>
+            <if test="record.roleUid != null and record.roleUid != ''">
+                and role_uid = #{record.roleUid}
+            </if>
+            <if test="record.permissionUid != null and record.permissionUid != ''">
+                and permission_uid = #{record.permissionUid}
+            </if>
+        </where>
+    </select>
+
+    <!--根据用户uid获取权限uid集合-->
+    <select id="selectPermissionUidByUserUid" resultType="java.lang.String">
+        SELECT permission_uid
+        FROM sys_role_permission
+        WHERE role_uid  in (
+            SELECT role_uid
+            FROM sys_user_role
+            WHERE user_uid = #{userUid}
+        )
+    </select>
+
+    <!--根据角色uid获取权限uid集合-->
+    <select id="selectPermissionUidByRoleUid" resultType="java.lang.String">
+        SELECT permission_uid
+        FROM sys_role_permission
+        WHERE role_uid = #{roleUid}
+    </select>
+
+</mapper>

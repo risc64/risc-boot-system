@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.risc.boot.modules.system.dao.SysPermissionDao">
+
+    <resultMap type="com.risc.boot.modules.system.bo.SysPermission" id="SysPermissionMap">
+        <result property="permissionUid" column="permission_uid" jdbcType="VARCHAR"/>
+        <result property="parentUid" column="parent_uid" jdbcType="VARCHAR"/>
+        <result property="permissionName" column="permission_name" jdbcType="VARCHAR"/>
+        <result property="permissionCode" column="permission_code" jdbcType="VARCHAR"/>
+        <result property="permissionType" column="permission_type" jdbcType="INTEGER"/>
+        <result property="requestMethod" column="request_method" jdbcType="VARCHAR"/>
+        <result property="menuUrl" column="menu_url" jdbcType="VARCHAR"/>
+        <result property="permissionLevel" column="permission_level" jdbcType="INTEGER"/>
+        <result property="sort" column="sort" jdbcType="INTEGER"/>
+        <result property="iconStyle" column="icon_style" jdbcType="VARCHAR"/>
+        <result property="createUserUid" column="create_user_uid" jdbcType="VARCHAR"/>
+        <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+        <result property="editUserUid" column="edit_user_uid" jdbcType="VARCHAR"/>
+        <result property="editTime" column="edit_time" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <!-- 基本字段 -->
+    <sql id="Base_Column_List">
+        permission_uid, parent_uid, permission_name, permission_code, permission_type, request_method, menu_url, permission_level, sort, icon_style, create_user_uid, create_time, edit_user_uid, edit_time    </sql>
+
+    <!--通过ID查询单条数据-->
+    <select id="selectByKey" resultMap="SysPermissionMap">
+        select
+        <include refid="Base_Column_List"/>
+        from sys_permission
+        where permission_uid = #{permissionUid}
+    </select>
+
+    <!--新增数据-->
+    <insert id="insert" keyProperty="permissionUid" useGeneratedKeys="true">
+        insert into sys_permission(permission_uid, parent_uid, permission_name, permission_code, permission_type, request_method, menu_url, permission_level, sort, icon_style, create_user_uid, create_time, edit_user_uid, edit_time)
+        values (#{permissionUid}, #{parentUid}, #{permissionName}, #{permissionCode}, #{permissionType}, #{requestMethod}, #{menuUrl}, #{permissionLevel}, #{sort}, #{iconStyle}, #{createUserUid}, #{createTime}, #{editUserUid}, #{editTime})
+    </insert>
+
+    <!--修改数据-->
+    <update id="update">
+        update sys_permission
+        <set>
+            parent_uid = #{parentUid},
+            permission_name = #{permissionName},
+            permission_code = #{permissionCode},
+            permission_type = #{permissionType},
+            request_method = #{requestMethod},
+            menu_url = #{menuUrl},
+            permission_level = #{permissionLevel},
+            sort = #{sort},
+            icon_style = #{iconStyle},
+            create_user_uid = #{createUserUid},
+            create_time = #{createTime},
+            edit_user_uid = #{editUserUid},
+            edit_time = #{editTime}
+        </set>
+        where permission_uid = #{permissionUid}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteByKey">
+        delete from sys_permission 
+        where permission_uid = #{permissionUid}
+    </delete>
+
+    <!--批量新增-->
+    <insert id="insertBatch" keyProperty="permissionUid" useGeneratedKeys="true">
+        insert into sys_permission(permission_uid, parent_uid, permission_name, permission_code, permission_type,
+        request_method, menu_url, permission_level, sort, icon_style, create_user_uid, create_time, edit_user_uid,
+        edit_time)
+        values
+        <foreach collection="list" item="item" separator=",">
+            (#{item.permissionUid},#{item.parentUid},#{item.permissionName},#{item.permissionCode},#{item.permissionType},#{item.requestMethod},#{item.menuUrl},#{item.permissionLevel},#{item.sort},#{item.iconStyle},#{item.createUserUid},#{item.createTime},#{item.editUserUid},#{item.editTime})
+        </foreach>
+    </insert>
+
+    <!--批量删除-->
+    <delete id="deleteBatch">
+        delete from sys_permission
+        where permission_uid in
+        <foreach collection="list" item="item" separator="," open="(" close=")">
+            #{item}
+        </foreach>
+    </delete>
+
+    <!--条件查询 注意：修改此sql时须同时修改 分页查询Count ，并去掉不必要的外联、排序等，保证分页查询总页数正确 -->
+    <select id="selectByProperty" resultMap="SysPermissionMap">
+        select
+        <include refid="Base_Column_List"/>
+        from sys_permission
+        <where>
+            <if test="record.permissionUid != null and record.permissionUid != ''">
+                and permission_uid = #{record.permissionUid}
+            </if>
+            <if test="record.parentUid != null and record.parentUid != ''">
+                and parent_uid = #{record.parentUid}
+            </if>
+            <if test="record.permissionName != null and record.permissionName != ''">
+                and permission_name = #{record.permissionName}
+            </if>
+            <if test="record.permissionCode != null and record.permissionCode != ''">
+                and permission_code = #{record.permissionCode}
+            </if>
+            <if test="record.permissionType != null">
+                and permission_type = #{record.permissionType}
+            </if>
+            <if test="record.requestMethod != null and record.requestMethod != ''">
+                and request_method = #{record.requestMethod}
+            </if>
+            <if test="record.menuUrl != null and record.menuUrl != ''">
+                and menu_url = #{record.menuUrl}
+            </if>
+            <if test="record.permissionLevel != null">
+                and permission_level = #{record.permissionLevel}
+            </if>
+            <if test="record.sort != null">
+                and sort = #{record.sort}
+            </if>
+            <if test="record.iconStyle != null and record.iconStyle != ''">
+                and icon_style = #{record.iconStyle}
+            </if>
+            <if test="record.createUserUid != null and record.createUserUid != ''">
+                and create_user_uid = #{record.createUserUid}
+            </if>
+            <if test="record.createTime != null">
+                and create_time = #{record.createTime}
+            </if>
+            <if test="record.editUserUid != null and record.editUserUid != ''">
+                and edit_user_uid = #{record.editUserUid}
+            </if>
+            <if test="record.editTime != null">
+                and edit_time = #{record.editTime}
+            </if>
+        </where>
+    </select>
+
+    <!--分页查询Count-->
+    <select id="selectByPropertyCount" resultType="Long">
+        select
+        count(permission_uid)
+        from sys_permission
+        <where>
+            <if test="record.permissionUid != null and record.permissionUid != ''">
+                and permission_uid = #{record.permissionUid}
+            </if>
+            <if test="record.parentUid != null and record.parentUid != ''">
+                and parent_uid = #{record.parentUid}
+            </if>
+            <if test="record.permissionName != null and record.permissionName != ''">
+                and permission_name = #{record.permissionName}
+            </if>
+            <if test="record.permissionCode != null and record.permissionCode != ''">
+                and permission_code = #{record.permissionCode}
+            </if>
+            <if test="record.permissionType != null">
+                and permission_type = #{record.permissionType}
+            </if>
+            <if test="record.requestMethod != null and record.requestMethod != ''">
+                and request_method = #{record.requestMethod}
+            </if>
+            <if test="record.menuUrl != null and record.menuUrl != ''">
+                and menu_url = #{record.menuUrl}
+            </if>
+            <if test="record.permissionLevel != null">
+                and permission_level = #{record.permissionLevel}
+            </if>
+            <if test="record.sort != null">
+                and sort = #{record.sort}
+            </if>
+            <if test="record.iconStyle != null and record.iconStyle != ''">
+                and icon_style = #{record.iconStyle}
+            </if>
+            <if test="record.createUserUid != null and record.createUserUid != ''">
+                and create_user_uid = #{record.createUserUid}
+            </if>
+            <if test="record.createTime != null">
+                and create_time = #{record.createTime}
+            </if>
+            <if test="record.editUserUid != null and record.editUserUid != ''">
+                and edit_user_uid = #{record.editUserUid}
+            </if>
+            <if test="record.editTime != null">
+                and edit_time = #{record.editTime}
+            </if>
+        </where>
+    </select>
+
+
+    <!--通过uid集合查询所有-->
+    <select id="selectByKeyList" resultMap="SysPermissionMap">
+        select
+        <include refid="Base_Column_List"/>
+        from sys_permission
+        where permission_uid in
+        <foreach collection="list" item="item" separator="," open="(" close=")">
+            #{item}
+        </foreach> 
+    </select>
+
+</mapper>
