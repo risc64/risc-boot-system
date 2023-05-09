@@ -26,6 +26,8 @@ public class LoginController {
     
     @Resource
     LoginService loginService;
+    
+    
 
     @PostMapping(value = "login", produces = "application/json;charset=UTF-8")
     public Result<Token> selectPage(@RequestBody Token record) {

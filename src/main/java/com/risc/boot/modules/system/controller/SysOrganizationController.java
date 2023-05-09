@@ -4,6 +4,7 @@ import com.risc.boot.common.bo.Result;
 import com.risc.boot.common.bo.StatusEnum;
 import com.risc.boot.modules.system.bo.SysOrganization;
 import com.risc.boot.modules.system.service.SysOrganizationService;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.UUID;
@@ -85,6 +86,7 @@ public class SysOrganizationController {
      * @param {organizationUid} 主键
      * @return 单条数据
      */
+    @PreAuthorize("hasAuthority('organization:query')")
     @PostMapping(value = "sysOrganization/query/one", produces = "application/json;charset=UTF-8")
     public Result<SysOrganization> selectByKey(@RequestBody SysOrganization record) {
         Result<SysOrganization> result = new Result<>();

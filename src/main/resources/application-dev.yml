@@ -54,7 +54,7 @@ security:
   ignored:
     urls:
       - /actuator/**
-      - /static/**
+      - /files/**
       - /login
       - /swagger-ui/
       - /swagger-resources/**

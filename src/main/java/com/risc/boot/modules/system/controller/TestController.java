@@ -2,6 +2,7 @@ package com.risc.boot.modules.system.controller;
 
 import com.risc.boot.modules.system.bo.Test;
 import com.risc.boot.modules.system.service.TestService;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -43,6 +44,7 @@ public class TestController {
      * @param record 实例对象
      * @return 集合
      */
+    @PreAuthorize("hasAuthority('test:query')")
     @PostMapping(value = "test/query/page", produces = "application/json;charset=UTF-8")
     public Result<IPage<Test>> selectPage(@ModelAttribute Page page, @RequestBody Test record) {
         Result<IPage<Test>> result = new Result<>();
@@ -71,6 +73,7 @@ public class TestController {
      * @param record 实例对象
      * @return 集合
      */
+    @PreAuthorize("hasAuthority('test:query')")
     @PostMapping(value = "test/query/property", produces = "application/json;charset=UTF-8")
     public Result<List<Test>> selectByProperty(@RequestBody Test record) {
         Result<List<Test>> result = new Result<>();
@@ -94,6 +97,7 @@ public class TestController {
      * @param {uid} 主键
      * @return 单条数据
      */
+    @PreAuthorize("hasAuthority('test:query')")
     @PostMapping(value = "test/query/one", produces = "application/json;charset=UTF-8")
     public Result<Test> selectByKey(@RequestBody Test record) {
         Result<Test> result = new Result<>();
@@ -117,6 +121,7 @@ public class TestController {
      * @param record 实例对象
      * @return 新增个数
      */
+    @PreAuthorize("hasAuthority('test:add')")
     @PostMapping(value = "test/add", produces = "application/json;charset=UTF-8")
     public Result<Test> insert(@RequestBody Test record) {
         Result<Test> result = new Result<>();
@@ -141,6 +146,7 @@ public class TestController {
      * @param record 实例对象
      * @return 修改个数
      */
+    @PreAuthorize("hasAuthority('test:update')")
     @PostMapping(value = "test/update", produces = "application/json;charset=UTF-8")
     public Result<Test> update(@RequestBody Test record) {
         Result<Test> result = new Result<>();
@@ -164,6 +170,7 @@ public class TestController {
      * @param list 实例对象主键集合
      * @return 删除个数
      */
+    @PreAuthorize("hasAuthority('test:delete')")
     @PostMapping(value = "test/delete", produces = "application/json;charset=UTF-8")
     public Result<Test> deleteBatch(@RequestBody List<String> list) {
         Result<Test> result = new Result<>();

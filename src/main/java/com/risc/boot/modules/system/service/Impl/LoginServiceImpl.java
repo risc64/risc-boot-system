@@ -65,12 +65,6 @@ public class LoginServiceImpl implements LoginService {
             } else {
                 List<SysPermission> sysPermissionList = sysPermissionService.selectByUserUid(t.getUserUid());
                 List<String> codeList = sysPermissionList.stream().map(e-> e.getPermissionCode()).collect(Collectors.toList());
-                //redisUtil.set(t.getUserName(), StringUtils.join(codeList,","),8 * 60 * 60);
-                //List<GrantedAuthority> authorities = new ArrayList<>();
-                //sysPermissionList.forEach(sysPermission ->{
-                //    SimpleGrantedAuthority simpleGrantedAuthority = new SimpleGrantedAuthority(sysPermission.getPermissionCode());
-                //    authorities.add(simpleGrantedAuthority);
-                //});
                 SecurityUserDetails securityUserDetails = SecurityUserDetails.builder().username(t.getUserName())
                         .password(t.getPassWord()).authorityList(codeList).build();
                 UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(securityUserDetails, null, securityUserDetails.getAuthorities());
@@ -78,6 +72,7 @@ public class LoginServiceImpl implements LoginService {
                 String token = jwtTokenUtil.generateToken(securityUserDetails);
                 if (StringUtils.isNotBlank(token)) {
                     t.setToken(token);
+                    t.setPassWord(null);
                     result.setStatusEnum(StatusEnum.OK, t);
                     redisUtil.set(t.getUserName(), JSONUtil.toJsonPrettyStr(securityUserDetails),8 * 60 * 60);
                 } else {
