@@ -14,7 +14,7 @@
         <result property="editUserUid" column="edit_user_uid" jdbcType="VARCHAR"/>
         <result property="editTime" column="edit_time" jdbcType="TIMESTAMP"/>
     </resultMap>
-    
+
     <!-- 基本字段 -->
     <sql id="Base_Column_List">
         role_uid, role_name, role_code, description, deleteable_flag, role_type, create_user_uid, create_time, edit_user_uid, edit_time    </sql>
@@ -22,134 +22,135 @@
     <!--通过ID查询单条数据-->
     <select id="selectByKey" resultMap="SysRoleMap">
         select
-          <include refid="Base_Column_List" />
+        <include refid="Base_Column_List"/>
         from sys_role
         where role_uid = #{roleUid}
     </select>
-    
+
     <!--新增数据-->
     <insert id="insert" keyProperty="roleUid" useGeneratedKeys="true">
         insert into sys_role(role_uid, role_name, role_code, description, deleteable_flag, role_type, create_user_uid, create_time, edit_user_uid, edit_time)
         values (#{roleUid}, #{roleName}, #{roleCode}, #{description}, #{deleteableFlag}, #{roleType}, #{createUserUid}, #{createTime}, #{editUserUid}, #{editTime})
     </insert>
-    
+
     <!--修改数据-->
     <update id="update">
         update sys_role
         <set>
-                                                role_name = #{roleName},
-                                                        role_code = #{roleCode},
-                                                        description = #{description},
-                                                        deleteable_flag = #{deleteableFlag},
-                                                        role_type = #{roleType},
-                                                        create_user_uid = #{createUserUid},
-                                                        create_time = #{createTime},
-                                                        edit_user_uid = #{editUserUid},
-                                                        edit_time = #{editTime}
-                        </set>
+            role_name = #{roleName},
+            role_code = #{roleCode},
+            description = #{description},
+            deleteable_flag = #{deleteableFlag},
+            role_type = #{roleType},
+            create_user_uid = #{createUserUid},
+            create_time = #{createTime},
+            edit_user_uid = #{editUserUid},
+            edit_time = #{editTime}
+        </set>
         where role_uid = #{roleUid}
     </update>
-    
+
     <!--通过主键删除-->
     <delete id="deleteByKey">
         delete from sys_role 
         where role_uid = #{roleUid}
     </delete>
-    
+
     <!--批量新增-->
     <insert id="insertBatch" keyProperty="roleUid" useGeneratedKeys="true">
-        insert into sys_role(role_uid, role_name, role_code, description, deleteable_flag, role_type, create_user_uid, create_time, edit_user_uid, edit_time)
-        values 
-        <foreach collection = "list" item = "item" separator = ",">
-        (#{item.roleUid},#{item.roleName},#{item.roleCode},#{item.description},#{item.deleteableFlag},#{item.roleType},#{item.createUserUid},#{item.createTime},#{item.editUserUid},#{item.editTime})
+        insert into sys_role(role_uid, role_name, role_code, description, deleteable_flag, role_type, create_user_uid,
+        create_time, edit_user_uid, edit_time)
+        values
+        <foreach collection="list" item="item" separator=",">
+            (#{item.roleUid},#{item.roleName},#{item.roleCode},#{item.description},#{item.deleteableFlag},#{item.roleType},#{item.createUserUid},#{item.createTime},#{item.editUserUid},#{item.editTime})
         </foreach>
     </insert>
-    
+
     <!--批量删除-->
     <delete id="deleteBatch">
-        delete from sys_role 
+        delete from sys_role
         where role_uid in
-        <foreach collection = "list" item = "item" separator = "," open = "(" close = ")">
+        <foreach collection="list" item="item" separator="," open="(" close=")">
             #{item}
         </foreach>
     </delete>
-    
+
     <!--条件查询 注意：修改此sql时须同时修改 分页查询Count ，并去掉不必要的外联、排序等，保证分页查询总页数正确 -->
     <select id="selectByProperty" resultMap="SysRoleMap">
         select
-          <include refid="Base_Column_List" />
+        <include refid="Base_Column_List"/>
         from sys_role
         <where>
-                        <if test="record.roleUid != null and record.roleUid != ''">
+            <if test="record.roleUid != null and record.roleUid != ''">
                 and role_uid = #{record.roleUid}
             </if>
-                        <if test="record.roleName != null and record.roleName != ''">
+            <if test="record.roleName != null and record.roleName != ''">
                 and role_name = #{record.roleName}
             </if>
-                        <if test="record.roleCode != null and record.roleCode != ''">
+            <if test="record.roleCode != null and record.roleCode != ''">
                 and role_code = #{record.roleCode}
             </if>
-                        <if test="record.description != null and record.description != ''">
+            <if test="record.description != null and record.description != ''">
                 and description = #{record.description}
             </if>
-                        <if test="record.deleteableFlag != null">
+            <if test="record.deleteableFlag != null">
                 and deleteable_flag = #{record.deleteableFlag}
             </if>
-                        <if test="record.roleType != null">
+            <if test="record.roleType != null">
                 and role_type = #{record.roleType}
             </if>
-                        <if test="record.createUserUid != null and record.createUserUid != ''">
+            <if test="record.createUserUid != null and record.createUserUid != ''">
                 and create_user_uid = #{record.createUserUid}
             </if>
-                        <if test="record.createTime != null">
+            <if test="record.createTime != null">
                 and create_time = #{record.createTime}
             </if>
-                        <if test="record.editUserUid != null and record.editUserUid != ''">
+            <if test="record.editUserUid != null and record.editUserUid != ''">
                 and edit_user_uid = #{record.editUserUid}
             </if>
-                        <if test="record.editTime != null">
+            <if test="record.editTime != null">
                 and edit_time = #{record.editTime}
             </if>
-                    </where>
+        </where>
     </select>
-    
+
     <!--分页查询Count-->
     <select id="selectByPropertyCount" resultType="Long">
         select
-          count(role_uid)
+        count(role_uid)
         from sys_role
         <where>
-                        <if test="record.roleUid != null and record.roleUid != ''">
+            <if test="record.roleUid != null and record.roleUid != ''">
                 and role_uid = #{record.roleUid}
             </if>
-                        <if test="record.roleName != null and record.roleName != ''">
+            <if test="record.roleName != null and record.roleName != ''">
                 and role_name = #{record.roleName}
             </if>
-                        <if test="record.roleCode != null and record.roleCode != ''">
+            <if test="record.roleCode != null and record.roleCode != ''">
                 and role_code = #{record.roleCode}
             </if>
-                        <if test="record.description != null and record.description != ''">
+            <if test="record.description != null and record.description != ''">
                 and description = #{record.description}
             </if>
-                        <if test="record.deleteableFlag != null">
+            <if test="record.deleteableFlag != null">
                 and deleteable_flag = #{record.deleteableFlag}
             </if>
-                        <if test="record.roleType != null">
+            <if test="record.roleType != null">
                 and role_type = #{record.roleType}
             </if>
-                        <if test="record.createUserUid != null and record.createUserUid != ''">
+            <if test="record.createUserUid != null and record.createUserUid != ''">
                 and create_user_uid = #{record.createUserUid}
             </if>
-                        <if test="record.createTime != null">
+            <if test="record.createTime != null">
                 and create_time = #{record.createTime}
             </if>
-                        <if test="record.editUserUid != null and record.editUserUid != ''">
+            <if test="record.editUserUid != null and record.editUserUid != ''">
                 and edit_user_uid = #{record.editUserUid}
             </if>
-                        <if test="record.editTime != null">
+            <if test="record.editTime != null">
                 and edit_time = #{record.editTime}
             </if>
-                    </where>
+        </where>
     </select>
 
 </mapper>
