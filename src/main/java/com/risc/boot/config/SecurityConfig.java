@@ -86,7 +86,10 @@ public class SecurityConfig  {
                 .and()
                 .authorizeRequests()
                 .anyRequest()
-                .authenticated();
+                .authenticated()
+                .and()
+                .logout().disable()
+        ;
         
         http.headers().cacheControl();
         // 基于token，所以不需要session

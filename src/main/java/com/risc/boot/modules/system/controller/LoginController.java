@@ -43,7 +43,7 @@ public class LoginController {
         return result;
     }
 
-    @PostMapping(value = "logoff", produces = "application/json;charset=UTF-8")
+    @PostMapping(value = "logout", produces = "application/json;charset=UTF-8")
     public Result<Token> logout(HttpServletRequest request) {
         Result<Token> result = new Result<>();
         try {
