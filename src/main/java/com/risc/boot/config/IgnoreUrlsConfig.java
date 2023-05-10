@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * Security不过滤路径配置
  * @author 李良发
  * @version v1.0.0
  * @since 5/8/2023 11:42 AM

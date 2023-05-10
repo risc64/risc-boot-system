@@ -49,8 +49,8 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
         // 获取token
         String token = request.getHeader("token");
         if (token != null) {
-            String username = jwtTokenUtil.getUserNameFromToken(token);
-            Object obj = redisUtil.get(username);
+            String userUid = jwtTokenUtil.getUserNameFromToken(token);
+            Object obj = redisUtil.get(userUid);
             if (obj != null) {
                 String jsonStr = JSONUtil.toJsonPrettyStr(obj);
                 SecurityUserDetails userDetails = JSONUtil.toBean(jsonStr, SecurityUserDetails.class);

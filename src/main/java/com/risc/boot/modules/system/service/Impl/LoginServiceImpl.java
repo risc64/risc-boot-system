@@ -65,7 +65,7 @@ public class LoginServiceImpl implements LoginService {
             } else {
                 List<SysPermission> sysPermissionList = sysPermissionService.selectByUserUid(t.getUserUid());
                 List<String> codeList = sysPermissionList.stream().map(e-> e.getPermissionCode()).collect(Collectors.toList());
-                SecurityUserDetails securityUserDetails = SecurityUserDetails.builder().username(t.getUserName())
+                SecurityUserDetails securityUserDetails = SecurityUserDetails.builder().username(t.getUserUid())
                         .password(t.getPassWord()).authorityList(codeList).build();
                 UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(securityUserDetails, null, securityUserDetails.getAuthorities());
                 SecurityContextHolder.getContext().setAuthentication(authenticationToken);
@@ -74,7 +74,7 @@ public class LoginServiceImpl implements LoginService {
                     t.setToken(token);
                     t.setPassWord(null);
                     result.setStatusEnum(StatusEnum.OK, t);
-                    redisUtil.set(t.getUserName(), JSONUtil.toJsonPrettyStr(securityUserDetails),8 * 60 * 60);
+                    redisUtil.set(t.getUserUid(), JSONUtil.toJsonPrettyStr(securityUserDetails),8 * 60 * 60);
                 } else {
                     result.setStatusEnum(StatusEnum.ERROR, null);
                     result.setMsg("token 生成失败");
@@ -91,9 +91,9 @@ public class LoginServiceImpl implements LoginService {
     public Result<Token> logout(String token) {
         Result<Token> result = new Result<>();
         try {
-            String username = jwtTokenUtil.getUserNameFromToken(token);
-            if (StringUtils.isNotBlank(username)) {
-                redisUtil.del(username);
+            String userUid = jwtTokenUtil.getUserNameFromToken(token);
+            if (StringUtils.isNotBlank(userUid)) {
+                redisUtil.del(userUid);
             }
             result.setStatusEnum(StatusEnum.OK, null);
         } catch (Exception e) {
