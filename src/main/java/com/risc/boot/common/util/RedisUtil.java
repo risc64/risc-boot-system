@@ -98,6 +98,16 @@ public class RedisUtil {
     }
 
     /**
+     * 删除
+     *
+     * @param key 键
+     * @return true成功 false 失败
+     */
+    public Boolean del(String key) {
+        return redisTemplate.delete(key);
+    }
+    
+    /**
      * 批量添加 key (重复的键会覆盖)
      *
      * @param keyAndValue

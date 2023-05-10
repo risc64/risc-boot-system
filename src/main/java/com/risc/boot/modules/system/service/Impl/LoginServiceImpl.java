@@ -93,7 +93,7 @@ public class LoginServiceImpl implements LoginService {
         try {
             String username = jwtTokenUtil.getUserNameFromToken(token);
             if (StringUtils.isNotBlank(username)) {
-                redisUtil.remove(username);
+                redisUtil.del(username);
             }
             result.setStatusEnum(StatusEnum.OK, null);
         } catch (Exception e) {
