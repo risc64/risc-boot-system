@@ -73,7 +73,6 @@ public class TestController {
      * @param record 实例对象
      * @return 集合
      */
-    @PreAuthorize("hasAuthority('test:query')")
     @PostMapping(value = "test/query/property", produces = "application/json;charset=UTF-8")
     public Result<List<Test>> selectByProperty(@RequestBody Test record) {
         Result<List<Test>> result = new Result<>();

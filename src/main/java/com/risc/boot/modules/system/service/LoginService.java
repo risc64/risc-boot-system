@@ -17,4 +17,11 @@ public interface LoginService {
      * @return
      */
     Result<Token> login(String userName, String password);
+
+    /**
+     * 注销
+     * @param token
+     * @return
+     */
+    Result<Token> logout(String token);
 }

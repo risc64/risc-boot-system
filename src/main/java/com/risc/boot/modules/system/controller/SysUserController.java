@@ -2,6 +2,7 @@ package com.risc.boot.modules.system.controller;
 
 import com.risc.boot.modules.system.bo.SysUser;
 import com.risc.boot.modules.system.service.SysUserService;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.UUID;
@@ -37,6 +38,7 @@ public class SysUserController {
      * @param record 实例对象
      * @return 集合
      */
+    @PreAuthorize("hasAuthority('sysUser:query')")
     @PostMapping(value = "sysUser/query/page", produces = "application/json;charset=UTF-8")
     public Result<IPage<SysUser>> selectPage(@ModelAttribute Page page, @RequestBody SysUser record) {
         Result<IPage<SysUser>> result = new Result<>();
@@ -64,6 +66,7 @@ public class SysUserController {
      * @param record 实例对象
      * @return 集合
      */
+    @PreAuthorize("hasAuthority('sysUser:query')")
     @PostMapping(value = "sysUser/query/property", produces = "application/json;charset=UTF-8")
     public Result<List<SysUser>> selectByProperty(@RequestBody SysUser record) {
         Result<List<SysUser>> result = new Result<>();
@@ -86,6 +89,7 @@ public class SysUserController {
      * @param {userUid} 主键
      * @return 单条数据
      */
+    @PreAuthorize("hasAuthority('sysUser:query')")
     @PostMapping(value = "sysUser/query/one", produces = "application/json;charset=UTF-8")
     public Result<SysUser> selectByKey(@RequestBody SysUser record) {
         Result<SysUser> result = new Result<>();
@@ -108,6 +112,7 @@ public class SysUserController {
      * @param record 实例对象
      * @return 新增个数
      */
+    @PreAuthorize("hasAuthority('sysUser:add')")
     @PostMapping(value = "sysUser/add", produces = "application/json;charset=UTF-8")
     public Result<SysUser> insert(@RequestBody SysUser record) {
         Result<SysUser> result = new Result<>();
@@ -131,6 +136,7 @@ public class SysUserController {
      * @param record 实例对象
      * @return 修改个数
      */
+    @PreAuthorize("hasAuthority('sysUser:update')")
     @PostMapping(value = "sysUser/update", produces = "application/json;charset=UTF-8")
     public Result<SysUser> update(@RequestBody SysUser record) {
         Result<SysUser> result = new Result<>(); 
@@ -153,6 +159,7 @@ public class SysUserController {
      * @param list 实例对象主键集合
      * @return 删除个数
      */
+    @PreAuthorize("hasAuthority('sysUser:delete')")
     @PostMapping(value = "sysUser/delete", produces = "application/json;charset=UTF-8")
     public Result<SysUser> deleteBatch(@RequestBody List<String> list) {
         Result<SysUser> result = new Result<>();

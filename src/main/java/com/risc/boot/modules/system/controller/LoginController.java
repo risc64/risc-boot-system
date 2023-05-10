@@ -30,10 +30,22 @@ public class LoginController {
     
 
     @PostMapping(value = "login", produces = "application/json;charset=UTF-8")
-    public Result<Token> selectPage(@RequestBody Token record) {
+    public Result<Token> login(@RequestBody Token record) {
         Result<Token> result = new Result<>();
         try {
             result = loginService.login(record.getUserName(), record.getPassWord());
+        } catch (Exception e) {
+            result.exception(StatusEnum.EXCEPTION);
+            logger.error(ExceptionUtil.getErrorString(e));
+        }
+        return result;
+    }
+
+    @PostMapping(value = "logout", produces = "application/json;charset=UTF-8")
+    public Result<Token> logout(@RequestBody Token record) {
+        Result<Token> result = new Result<>();
+        try {
+            result = loginService.logout(record.getToken());
         } catch (Exception e) {
             result.exception(StatusEnum.EXCEPTION);
             logger.error(ExceptionUtil.getErrorString(e));

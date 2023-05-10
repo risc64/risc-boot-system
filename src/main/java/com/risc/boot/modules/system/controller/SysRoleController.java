@@ -2,6 +2,7 @@ package com.risc.boot.modules.system.controller;
 
 import com.risc.boot.modules.system.bo.SysRole;
 import com.risc.boot.modules.system.service.SysRoleService;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.UUID;
@@ -37,6 +38,7 @@ public class SysRoleController {
      * @param record 实例对象
      * @return 集合
      */
+    @PreAuthorize("hasAuthority('sysRole:query')")
     @PostMapping(value = "sysRole/query/page", produces = "application/json;charset=UTF-8")
     public Result<IPage<SysRole>> selectPage(@ModelAttribute Page page, @RequestBody SysRole record) {
         Result<IPage<SysRole>> result = new Result<>();
@@ -64,6 +66,7 @@ public class SysRoleController {
      * @param record 实例对象
      * @return 集合
      */
+    @PreAuthorize("hasAuthority('sysRole:query')")
     @PostMapping(value = "sysRole/query/property", produces = "application/json;charset=UTF-8")
     public Result<List<SysRole>> selectByProperty(@RequestBody SysRole record) {
         Result<List<SysRole>> result = new Result<>();
@@ -86,6 +89,7 @@ public class SysRoleController {
      * @param {roleUid} 主键
      * @return 单条数据
      */
+    @PreAuthorize("hasAuthority('sysRole:query')")
     @PostMapping(value = "sysRole/query/one", produces = "application/json;charset=UTF-8")
     public Result<SysRole> selectByKey(@RequestBody SysRole record) {
         Result<SysRole> result = new Result<>();
@@ -108,6 +112,7 @@ public class SysRoleController {
      * @param record 实例对象
      * @return 新增个数
      */
+    @PreAuthorize("hasAuthority('sysRole:add')")
     @PostMapping(value = "sysRole/add", produces = "application/json;charset=UTF-8")
     public Result<SysRole> insert(@RequestBody SysRole record) {
         Result<SysRole> result = new Result<>();
@@ -131,6 +136,7 @@ public class SysRoleController {
      * @param record 实例对象
      * @return 修改个数
      */
+    @PreAuthorize("hasAuthority('sysRole:update')")
     @PostMapping(value = "sysRole/update", produces = "application/json;charset=UTF-8")
     public Result<SysRole> update(@RequestBody SysRole record) {
         Result<SysRole> result = new Result<>(); 
@@ -153,6 +159,7 @@ public class SysRoleController {
      * @param list 实例对象主键集合
      * @return 删除个数
      */
+    @PreAuthorize("hasAuthority('sysRole:delete')")
     @PostMapping(value = "sysRole/delete", produces = "application/json;charset=UTF-8")
     public Result<SysRole> deleteBatch(@RequestBody List<String> list) {
         Result<SysRole> result = new Result<>();

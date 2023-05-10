@@ -86,4 +86,20 @@ public class LoginServiceImpl implements LoginService {
         }
         return result;
     }
+
+    @Override
+    public Result<Token> logout(String token) {
+        Result<Token> result = new Result<>();
+        try {
+            String username = jwtTokenUtil.getUserNameFromToken(token);
+            if (StringUtils.isNotBlank(username)) {
+                redisUtil.remove(username);
+            }
+            result.setStatusEnum(StatusEnum.OK, null);
+        } catch (Exception e) {
+            result.exception(StatusEnum.EXCEPTION);
+            logger.error(ExceptionUtil.getErrorString(e));
+        }
+        return result;
+    }
 }

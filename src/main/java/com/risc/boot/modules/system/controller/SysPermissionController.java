@@ -2,6 +2,7 @@ package com.risc.boot.modules.system.controller;
 
 import com.risc.boot.modules.system.bo.SysPermission;
 import com.risc.boot.modules.system.service.SysPermissionService;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.UUID;
@@ -37,6 +38,7 @@ public class SysPermissionController {
      * @param record 实例对象
      * @return 集合
      */
+    @PreAuthorize("hasAuthority('sysPermission:query')")
     @PostMapping(value = "sysPermission/query/page", produces = "application/json;charset=UTF-8")
     public Result<IPage<SysPermission>> selectPage(@ModelAttribute Page page, @RequestBody SysPermission record) {
         Result<IPage<SysPermission>> result = new Result<>();
@@ -64,6 +66,7 @@ public class SysPermissionController {
      * @param record 实例对象
      * @return 集合
      */
+    @PreAuthorize("hasAuthority('sysPermission:query')")
     @PostMapping(value = "sysPermission/query/property", produces = "application/json;charset=UTF-8")
     public Result<List<SysPermission>> selectByProperty(@RequestBody SysPermission record) {
         Result<List<SysPermission>> result = new Result<>();
@@ -86,6 +89,7 @@ public class SysPermissionController {
      * @param {permissionUid} 主键
      * @return 单条数据
      */
+    @PreAuthorize("hasAuthority('sysPermission:query')")
     @PostMapping(value = "sysPermission/query/one", produces = "application/json;charset=UTF-8")
     public Result<SysPermission> selectByKey(@RequestBody SysPermission record) {
         Result<SysPermission> result = new Result<>();
@@ -108,6 +112,7 @@ public class SysPermissionController {
      * @param record 实例对象
      * @return 新增个数
      */
+    @PreAuthorize("hasAuthority('sysPermission:add')")
     @PostMapping(value = "sysPermission/add", produces = "application/json;charset=UTF-8")
     public Result<SysPermission> insert(@RequestBody SysPermission record) {
         Result<SysPermission> result = new Result<>();
@@ -131,6 +136,7 @@ public class SysPermissionController {
      * @param record 实例对象
      * @return 修改个数
      */
+    @PreAuthorize("hasAuthority('sysPermission:update')")
     @PostMapping(value = "sysPermission/update", produces = "application/json;charset=UTF-8")
     public Result<SysPermission> update(@RequestBody SysPermission record) {
         Result<SysPermission> result = new Result<>(); 
@@ -153,6 +159,7 @@ public class SysPermissionController {
      * @param list 实例对象主键集合
      * @return 删除个数
      */
+    @PreAuthorize("hasAuthority('sysPermission:delete')")
     @PostMapping(value = "sysPermission/delete", produces = "application/json;charset=UTF-8")
     public Result<SysPermission> deleteBatch(@RequestBody List<String> list) {
         Result<SysPermission> result = new Result<>();

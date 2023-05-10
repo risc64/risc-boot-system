@@ -37,6 +37,7 @@ public class SysOrganizationController {
      * @param record 实例对象
      * @return 集合
      */
+    @PreAuthorize("hasAuthority('sysOrganization:query')")
     @PostMapping(value = "sysOrganization/query/page", produces = "application/json;charset=UTF-8")
     public Result<IPage<SysOrganization>> selectPage(@ModelAttribute Page page, @RequestBody SysOrganization record) {
         Result<IPage<SysOrganization>> result = new Result<>();
@@ -64,6 +65,7 @@ public class SysOrganizationController {
      * @param record 实例对象
      * @return 集合
      */
+    @PreAuthorize("hasAuthority('sysOrganization:query')")
     @PostMapping(value = "sysOrganization/query/property", produces = "application/json;charset=UTF-8")
     public Result<List<SysOrganization>> selectByProperty(@RequestBody SysOrganization record) {
         Result<List<SysOrganization>> result = new Result<>();
@@ -86,7 +88,7 @@ public class SysOrganizationController {
      * @param {organizationUid} 主键
      * @return 单条数据
      */
-    @PreAuthorize("hasAuthority('organization:query')")
+    @PreAuthorize("hasAuthority('sysOrganization:query')")
     @PostMapping(value = "sysOrganization/query/one", produces = "application/json;charset=UTF-8")
     public Result<SysOrganization> selectByKey(@RequestBody SysOrganization record) {
         Result<SysOrganization> result = new Result<>();
@@ -109,6 +111,7 @@ public class SysOrganizationController {
      * @param record 实例对象
      * @return 新增个数
      */
+    @PreAuthorize("hasAuthority('sysOrganization:add')")
     @PostMapping(value = "sysOrganization/add", produces = "application/json;charset=UTF-8")
     public Result<SysOrganization> insert(@RequestBody SysOrganization record) {
         Result<SysOrganization> result = new Result<>();
@@ -132,6 +135,7 @@ public class SysOrganizationController {
      * @param record 实例对象
      * @return 修改个数
      */
+    @PreAuthorize("hasAuthority('sysOrganization:update')")
     @PostMapping(value = "sysOrganization/update", produces = "application/json;charset=UTF-8")
     public Result<SysOrganization> update(@RequestBody SysOrganization record) {
         Result<SysOrganization> result = new Result<>(); 
@@ -154,6 +158,7 @@ public class SysOrganizationController {
      * @param list 实例对象主键集合
      * @return 删除个数
      */
+    @PreAuthorize("hasAuthority('sysOrganization:delete')")
     @PostMapping(value = "sysOrganization/delete", produces = "application/json;charset=UTF-8")
     public Result<SysOrganization> deleteBatch(@RequestBody List<String> list) {
         Result<SysOrganization> result = new Result<>();
