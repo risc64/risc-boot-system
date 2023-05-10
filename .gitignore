@@ -35,3 +35,4 @@ build/
 /mvnw.cmd
 /logs/
 /.mvn/
+/src/main/resources/ts/
