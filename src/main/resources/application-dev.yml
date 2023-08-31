@@ -36,6 +36,13 @@ spring:
         max-idle: 16
         max-active: 32
         min-idle: 8
+  rabbitmq:
+    addresses: 192.168.125.11:5672,192.168.125.12:5672,192.168.125.13:5672
+    username: riscboot
+    password: riscboot123
+    virtual-host: RiscBootHost # 连接到rabbitMQ的vhost
+
+
 mybatis-plus:
   mapper-locations: classpath:mapper/*.xml
   configuration:
@@ -64,3 +71,25 @@ security:
       - /**/*.css
       - /**/*.png
       - /favicon.ico
+# 配置 rocketmq
+#rocketmq:
+#  name-server: 192.168.125.11:9876;192.168.125.12:9876;192.168.125.13:9876
+#  #生产者
+#  producer:
+#    #生产者组名，规定在一个应用里面必须唯一
+#    group: CID_RMQ_SYS_mqtt_event
+#    #消息发送的超时时间 默认3000ms
+#    send-message-timeout: 3000
+#    #消息达到4096字节的时候，消息就会被压缩。默认 4096
+#    compress-message-body-threshold: 4096
+#    #最大的消息限制，默认为128K
+#    max-message-size: 4194304
+#    #同步消息发送失败重试次数
+#    retry-times-when-send-failed: 3
+#    #在内部发送失败时是否重试其他代理，这个参数在有多个broker时才生效
+#    retry-next-server: true
+#    #异步消息发送失败重试的次数
+#    retry-times-when-send-async-failed: 3
+#    # 开启ALC需要accessKey、secretKey长度需大于6，否则broker启动失败
+#    access-key: RocketTest
+#    secret-key: llf123abc

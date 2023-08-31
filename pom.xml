@@ -132,6 +132,18 @@
             <artifactId>commons-pool2</artifactId>
         </dependency>
 
+        <!--mqtt依赖-->
+        <dependency>
+            <groupId>org.springframework.integration</groupId>
+            <artifactId>spring-integration-mqtt</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.paho</groupId>
+            <artifactId>org.eclipse.paho.client.mqttv3</artifactId>
+            <version>1.2.1</version>
+        </dependency>
+
+
     </dependencies>
 
     <!-- 多环境打包配置 -->
@@ -145,6 +157,12 @@
             <activation>
                 <activeByDefault>true</activeByDefault>
             </activation>
+        </profile>
+        <profile>
+            <id>test</id>
+            <properties>
+                <package.environment>test</package.environment>
+            </properties>
         </profile>
     </profiles>
 
