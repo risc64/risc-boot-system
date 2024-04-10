@@ -2,7 +2,7 @@ server:
   port: 8087
 spring:
   application:
-    name: data-dealth
+    name: risc-boot-system
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     type: com.zaxxer.hikari.HikariDataSource

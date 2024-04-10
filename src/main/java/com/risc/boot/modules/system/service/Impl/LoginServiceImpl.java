@@ -55,7 +55,7 @@ public class LoginServiceImpl implements LoginService {
     public Result<Token> login(String userName, String password) {
         Result<Token> result = new Result<>();
         try {
-            System.out.println(passwordEncoder.encode(password));
+//            System.out.println(passwordEncoder.encode(password));
             Token t = sysUserService.selectTokenByUserName(userName);
             if (t == null) {
                 result.setStatusEnum(StatusEnum.ERROR, null);
