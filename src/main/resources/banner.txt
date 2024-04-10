@@ -5,7 +5,7 @@ ${AnsiColor.BRIGHT_BLUE}
 |  _  /| / __|/ __|  _ < / _ \ / _ \| __|
 | | \ \| \__ \ (__| |_) | (_) | (_) | |_ 
 |_|  \_\_|___/\___|____/ \___/ \___/ \__|
-Application Name: ${systemconfig.projectName}
-Application Version: ${systemconfig.version}
+Application Name: ${spring.application.name}
+Application Version: ${version}
 Spring Boot Version: ${spring-boot.version}${spring-boot.formatted-version}
 ${AnsiColor.DEFAULT}

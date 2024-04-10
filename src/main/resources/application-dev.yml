@@ -2,13 +2,13 @@ server:
   port: 8088
 spring:
   application:
-    name: data-dealth
+    name: risc-boot-system
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     type: com.zaxxer.hikari.HikariDataSource
     url: jdbc:mysql://localhost:3306/risc_boot?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&useSSL=false&allowMultiQueries=true
     username: root
-    password: 123abc
+    password: Abc@1234
     hikari:
       minimum-idle: 5
       maximum-pool-size: 5
@@ -36,11 +36,11 @@ spring:
         max-idle: 16
         max-active: 32
         min-idle: 8
-  rabbitmq:
-    addresses: 192.168.125.11:5672,192.168.125.12:5672,192.168.125.13:5672
-    username: riscboot
-    password: riscboot123
-    virtual-host: RiscBootHost # 连接到rabbitMQ的vhost
+#  rabbitmq:
+#    addresses: 192.168.125.11:5672,192.168.125.12:5672,192.168.125.13:5672
+#    username: riscboot
+#    password: riscboot123
+#    virtual-host: RiscBootHost # 连接到rabbitMQ的vhost
 
 
 mybatis-plus:

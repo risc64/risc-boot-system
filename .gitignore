@@ -36,3 +36,5 @@ build/
 /logs/
 /.mvn/
 /src/main/resources/ts/
+
+.DS_Store
