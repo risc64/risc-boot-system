@@ -253,13 +253,13 @@
     
     <select id="selectTokenByUserName" resultMap="TokenMap">
         SELECT sys_user.uid user_uid, sys_user.user_name, sys_user.user_nick, sys_user.pass_word, sys_user.open_uid, sys_user.profile_picture,
-        sys_role.role_uid, sys_role.role_name, sys_organization.organization_uid, sys_organization.organization_name, 
-        sys_organization.organization_code
+               sys_role.uid role_uid, sys_role.role_name, sys_organization.uid organization_uid, sys_organization.organization_name,
+               sys_organization.organization_code
         FROM sys_user
-        LEFT JOIN sys_user_role on sys_user.uid = sys_user_role.uid
-        LEFT JOIN sys_role on sys_role.role_uid = sys_user_role.role_uid
-        LEFT JOIN sys_user_organization on sys_user.uid = sys_user_organization.organization_uid
-        LEFT JOIN sys_organization on sys_organization.organization_uid = sys_user_organization.organization_uid
+        LEFT JOIN sys_user_role on sys_user.uid = sys_user_role.user_uid
+        LEFT JOIN sys_role on sys_role.uid = sys_user_role.role_uid
+        LEFT JOIN sys_user_organization on sys_user.uid = sys_user_organization.user_uid
+        LEFT JOIN sys_organization on sys_organization.uid = sys_user_organization.organization_uid
         WHERE user_name = #{userName}
     </select>
 

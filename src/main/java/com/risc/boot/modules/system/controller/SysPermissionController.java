@@ -1,5 +1,6 @@
 package com.risc.boot.modules.system.controller;
 
+import com.risc.boot.common.bo.Token;
 import com.risc.boot.modules.system.bo.SysPermission;
 import com.risc.boot.modules.system.service.SysPermissionService;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -175,5 +176,15 @@ public class SysPermissionController {
             logger.error(ExceptionUtil.getErrorString(e));
         }
         return result;
+    }
+    
+    /**
+     * 根据角色uid 获取菜单
+     * @param token 实例对象主键集合
+     * @return 删除个数
+     */
+    @PostMapping(value = "sysPermission/getMenu", produces = "application/json;charset=UTF-8")
+    public Result<List<SysPermission>> deleteBatch(@RequestBody Token token) {
+        return sysPermissionService.getMenuByRoleUid(token.getRoleUid());
     }
 }

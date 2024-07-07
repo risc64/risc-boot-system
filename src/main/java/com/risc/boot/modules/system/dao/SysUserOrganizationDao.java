@@ -15,10 +15,10 @@ public interface SysUserOrganizationDao {
 
     /**
      * 通过ID查询单条数据
-     * @param uerUid 主键
+     * @param userUid 主键
      * @return 实例对象
      */
-    SysUserOrganization selectByKey(String uerUid);
+    SysUserOrganization selectByKey(String userUid);
 
     /**
      * 新增数据
@@ -36,10 +36,10 @@ public interface SysUserOrganizationDao {
 
     /**
      * 通过主键删除数据
-     * @param uerUid 主键
+     * @param userUid 主键
      * @return 影响行数
      */
-    int deleteByKey(String uerUid);
+    int deleteByKey(String userUid);
     
     /**
      * 批量新增数据

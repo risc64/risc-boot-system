@@ -19,7 +19,7 @@ public class SysUserOrganization implements Serializable {
     /**
     * 用户uid
     */
-    private String uerUid;
+    private String userUid;
     
     /**
     * 组织uid

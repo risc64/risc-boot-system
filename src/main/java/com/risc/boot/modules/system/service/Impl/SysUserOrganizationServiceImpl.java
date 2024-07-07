@@ -25,12 +25,12 @@ public class SysUserOrganizationServiceImpl implements SysUserOrganizationServic
 
     /**
      * 通过ID查询单条数据
-     * @param uerUid 主键
+     * @param userUid 主键
      * @return 实例对象
      */
     @Override
-    public SysUserOrganization selectByKey(String uerUid) {
-        return sysUserOrganizationDao.selectByKey(uerUid);
+    public SysUserOrganization selectByKey(String userUid) {
+        return sysUserOrganizationDao.selectByKey(userUid);
     }
 
     /**
@@ -55,12 +55,12 @@ public class SysUserOrganizationServiceImpl implements SysUserOrganizationServic
 
     /**
      * 通过主键删除数据
-     * @param uerUid 主键
+     * @param userUid 主键
      * @return 影响行数
      */
     @Override
-    public int deleteByKey(String uerUid) {
-        return sysUserOrganizationDao.deleteByKey(uerUid);
+    public int deleteByKey(String userUid) {
+        return sysUserOrganizationDao.deleteByKey(userUid);
     }
     
     /**

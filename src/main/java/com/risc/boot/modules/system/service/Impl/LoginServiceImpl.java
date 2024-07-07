@@ -135,36 +135,41 @@ public class LoginServiceImpl implements LoginService {
     @Override
     public Result<Captcha> captcha() {
         Result<Captcha> result = new Result<>();
-        String captchaType = captchaConfig.getType();
-        int width = captchaConfig.getWidth();
-        int height = captchaConfig.getHeight();
-        int interfereCount = captchaConfig.getInterfereCount();
-        int codeLength = captchaConfig.getCode().getLength();
+        try {
+            String captchaType = captchaConfig.getType();
+            int width = captchaConfig.getWidth();
+            int height = captchaConfig.getHeight();
+            int interfereCount = captchaConfig.getInterfereCount();
+            int codeLength = captchaConfig.getCode().getLength();
     
-        AbstractCaptcha captcha;
-        if (CaptchaTypeEnum.CIRCLE.name().equalsIgnoreCase(captchaType)) {
-            captcha = CaptchaUtil.createCircleCaptcha(width, height, codeLength, interfereCount);
-        } else if (CaptchaTypeEnum.GIF.name().equalsIgnoreCase(captchaType)) {
-            captcha = CaptchaUtil.createGifCaptcha(width, height, codeLength);
-        } else if (CaptchaTypeEnum.LINE.name().equalsIgnoreCase(captchaType)) {
-            captcha = CaptchaUtil.createLineCaptcha(width, height, codeLength, interfereCount);
-        } else if (CaptchaTypeEnum.SHEAR.name().equalsIgnoreCase(captchaType)) {
-            captcha = CaptchaUtil.createShearCaptcha(width, height, codeLength, interfereCount);
-        } else {
-            throw new IllegalArgumentException("Invalid captcha type: " + captchaType);
+            AbstractCaptcha captcha;
+            if (CaptchaTypeEnum.CIRCLE.name().equalsIgnoreCase(captchaType)) {
+                captcha = CaptchaUtil.createCircleCaptcha(width, height, codeLength, interfereCount);
+            } else if (CaptchaTypeEnum.GIF.name().equalsIgnoreCase(captchaType)) {
+                captcha = CaptchaUtil.createGifCaptcha(width, height, codeLength);
+            } else if (CaptchaTypeEnum.LINE.name().equalsIgnoreCase(captchaType)) {
+                captcha = CaptchaUtil.createLineCaptcha(width, height, codeLength, interfereCount);
+            } else if (CaptchaTypeEnum.SHEAR.name().equalsIgnoreCase(captchaType)) {
+                captcha = CaptchaUtil.createShearCaptcha(width, height, codeLength, interfereCount);
+            } else {
+                throw new IllegalArgumentException("Invalid captcha type: " + captchaType);
+            }
+            captcha.setGenerator(codeGenerator);
+            captcha.setTextAlpha(captchaConfig.getTextAlpha());
+            captcha.setFont(captchaFont);
+    
+            String captchaCode = captcha.getCode();
+            String imageBase64Data = captcha.getImageBase64Data();
+            String captchaKey = IdUtil.fastSimpleUUID();
+            redisUtil.set(SystemConstants.CAPTCHA_CODE_PREFIX + captchaKey, captchaCode, captchaConfig.getExpireSeconds());
+            Captcha captcha1 = new Captcha();
+            captcha1.setCaptchaKey(captchaKey);
+            captcha1.setCaptchaBase64(imageBase64Data);
+            result.setData(captcha1);
+        } catch (Exception e) {
+            result.exception(StatusEnum.EXCEPTION);
+            logger.error(ExceptionUtil.getErrorString(e));
         }
-        captcha.setGenerator(codeGenerator);
-        captcha.setTextAlpha(captchaConfig.getTextAlpha());
-        captcha.setFont(captchaFont);
-    
-        String captchaCode = captcha.getCode();
-        String imageBase64Data = captcha.getImageBase64Data();
-        String captchaKey = IdUtil.fastSimpleUUID();
-        redisUtil.set(SystemConstants.CAPTCHA_CODE_PREFIX + captchaKey, captchaCode, captchaConfig.getExpireSeconds());
-        Captcha captcha1 = new Captcha();
-        captcha1.setCaptchaKey(captchaKey);
-        captcha1.setCaptchaBase64(imageBase64Data);
-        result.setData(captcha1);
         return result;
     }
 }

@@ -174,9 +174,9 @@ INSERT INTO `sys_user` VALUES ('0000', 'admin', '超人', '$2a$10$iI/Z9Ahjh3mIee
 -- ----------------------------
 DROP TABLE IF EXISTS `sys_user_organization`;
 CREATE TABLE `sys_user_organization`  (
-  `uer_uid` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '用户uid',
+  `user_uid` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '用户uid',
   `organization_uid` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '组织uid',
-  PRIMARY KEY (`uer_uid`, `organization_uid`) USING BTREE
+  PRIMARY KEY (`user_uid`, `organization_uid`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '用户组织关系表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
