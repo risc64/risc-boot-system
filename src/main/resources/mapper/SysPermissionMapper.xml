@@ -3,13 +3,14 @@
 <mapper namespace="com.risc.boot.modules.system.dao.SysPermissionDao">
 
     <resultMap type="com.risc.boot.modules.system.bo.SysPermission" id="SysPermissionMap">
-        <result property="permissionUid" column="permission_uid" jdbcType="VARCHAR"/>
+        <result property="uid" column="uid" jdbcType="VARCHAR"/>
         <result property="parentUid" column="parent_uid" jdbcType="VARCHAR"/>
         <result property="permissionName" column="permission_name" jdbcType="VARCHAR"/>
         <result property="permissionCode" column="permission_code" jdbcType="VARCHAR"/>
         <result property="permissionType" column="permission_type" jdbcType="INTEGER"/>
         <result property="requestMethod" column="request_method" jdbcType="VARCHAR"/>
         <result property="menuUrl" column="menu_url" jdbcType="VARCHAR"/>
+        <result property="menuComponent" column="menu_component" jdbcType="VARCHAR"/>
         <result property="permissionLevel" column="permission_level" jdbcType="INTEGER"/>
         <result property="sort" column="sort" jdbcType="INTEGER"/>
         <result property="iconStyle" column="icon_style" jdbcType="VARCHAR"/>
@@ -19,22 +20,64 @@
         <result property="editTime" column="edit_time" jdbcType="TIMESTAMP"/>
     </resultMap>
 
+    <resultMap type="com.risc.boot.modules.system.bo.SysPermission" id="SysPermissionMapTree">
+        <result property="uid" column="uid" jdbcType="VARCHAR"/>
+        <result property="parentUid" column="parent_uid" jdbcType="VARCHAR"/>
+        <result property="permissionName" column="permission_name" jdbcType="VARCHAR"/>
+        <result property="permissionCode" column="permission_code" jdbcType="VARCHAR"/>
+        <result property="permissionType" column="permission_type" jdbcType="INTEGER"/>
+        <result property="requestMethod" column="request_method" jdbcType="VARCHAR"/>
+        <result property="menuUrl" column="menu_url" jdbcType="VARCHAR"/>
+        <result property="menuComponent" column="menu_component" jdbcType="VARCHAR"/>
+        <result property="permissionLevel" column="permission_level" jdbcType="INTEGER"/>
+        <result property="sort" column="sort" jdbcType="INTEGER"/>
+        <result property="iconStyle" column="icon_style" jdbcType="VARCHAR"/>
+        <result property="createUserUid" column="create_user_uid" jdbcType="VARCHAR"/>
+        <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+        <result property="editUserUid" column="update_user_uid" jdbcType="VARCHAR"/>
+        <result property="editTime" column="update_time" jdbcType="TIMESTAMP"/>
+        <collection property="childList" column="{uid=uid,roleUid=role_uid}"
+                    ofType="com.risc.boot.modules.system.bo.SysPermission" javaType="java.util.ArrayList"
+                    select="selectChildMenuList"></collection>
+    </resultMap>
+
+    <resultMap type="com.risc.boot.modules.system.bo.SysPermission" id="SysPermissionMapTree1">
+        <result property="uid" column="uid" jdbcType="VARCHAR"/>
+        <result property="parentUid" column="parent_uid" jdbcType="VARCHAR"/>
+        <result property="permissionName" column="permission_name" jdbcType="VARCHAR"/>
+        <result property="permissionCode" column="permission_code" jdbcType="VARCHAR"/>
+        <result property="permissionType" column="permission_type" jdbcType="INTEGER"/>
+        <result property="requestMethod" column="request_method" jdbcType="VARCHAR"/>
+        <result property="menuUrl" column="menu_url" jdbcType="VARCHAR"/>
+        <result property="menuComponent" column="menu_component" jdbcType="VARCHAR"/>
+        <result property="permissionLevel" column="permission_level" jdbcType="INTEGER"/>
+        <result property="sort" column="sort" jdbcType="INTEGER"/>
+        <result property="iconStyle" column="icon_style" jdbcType="VARCHAR"/>
+        <result property="createUserUid" column="create_user_uid" jdbcType="VARCHAR"/>
+        <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+        <result property="editUserUid" column="update_user_uid" jdbcType="VARCHAR"/>
+        <result property="editTime" column="update_time" jdbcType="TIMESTAMP"/>
+        <collection property="childList" column="uid"
+                    ofType="com.risc.boot.modules.system.bo.SysPermission" javaType="java.util.ArrayList"
+                    select="selectChildMenuList1"></collection>
+    </resultMap>
+
     <!-- 基本字段 -->
     <sql id="Base_Column_List">
-        permission_uid, parent_uid, permission_name, permission_code, permission_type, request_method, menu_url, permission_level, sort, icon_style, create_user_uid, create_time, edit_user_uid, edit_time    </sql>
+        uid, parent_uid, permission_name, permission_code, permission_type, request_method, menu_url, menu_component, permission_level, sort, icon_style, create_user_uid, create_time, edit_user_uid, edit_time    </sql>
 
     <!--通过ID查询单条数据-->
     <select id="selectByKey" resultMap="SysPermissionMap">
         select
         <include refid="Base_Column_List"/>
         from sys_permission
-        where permission_uid = #{permissionUid}
+        where uid = #{uid}
     </select>
 
     <!--新增数据-->
-    <insert id="insert" keyProperty="permissionUid" useGeneratedKeys="true">
-        insert into sys_permission(permission_uid, parent_uid, permission_name, permission_code, permission_type, request_method, menu_url, permission_level, sort, icon_style, create_user_uid, create_time, edit_user_uid, edit_time)
-        values (#{permissionUid}, #{parentUid}, #{permissionName}, #{permissionCode}, #{permissionType}, #{requestMethod}, #{menuUrl}, #{permissionLevel}, #{sort}, #{iconStyle}, #{createUserUid}, #{createTime}, #{editUserUid}, #{editTime})
+    <insert id="insert" keyProperty="uid" useGeneratedKeys="true">
+        insert into sys_permission(uid, parent_uid, permission_name, permission_code, permission_type, request_method, menu_url, menu_component, permission_level, sort, icon_style, create_user_uid, create_time, edit_user_uid, edit_time)
+        values (#{uid}, #{parentUid}, #{permissionName}, #{permissionCode}, #{permissionType}, #{requestMethod}, #{menuUrl}, #{menuComponent}, #{permissionLevel}, #{sort}, #{iconStyle}, #{createUserUid}, #{createTime}, #{editUserUid}, #{editTime})
     </insert>
 
     <!--修改数据-->
@@ -47,6 +90,7 @@
             permission_type = #{permissionType},
             request_method = #{requestMethod},
             menu_url = #{menuUrl},
+            menu_component = #{menuComponent},
             permission_level = #{permissionLevel},
             sort = #{sort},
             icon_style = #{iconStyle},
@@ -55,30 +99,31 @@
             edit_user_uid = #{editUserUid},
             edit_time = #{editTime}
         </set>
-        where permission_uid = #{permissionUid}
+        where uid = #{uid}
     </update>
 
     <!--通过主键删除-->
     <delete id="deleteByKey">
         delete from sys_permission 
-        where permission_uid = #{permissionUid}
+        where uid = #{uid}
     </delete>
 
     <!--批量新增-->
-    <insert id="insertBatch" keyProperty="permissionUid" useGeneratedKeys="true">
-        insert into sys_permission(permission_uid, parent_uid, permission_name, permission_code, permission_type,
-        request_method, menu_url, permission_level, sort, icon_style, create_user_uid, create_time, edit_user_uid,
+    <insert id="insertBatch" keyProperty="uid" useGeneratedKeys="true">
+        insert into sys_permission(uid, parent_uid, permission_name, permission_code, permission_type,
+        request_method, menu_url, menu_component, permission_level, sort, icon_style, create_user_uid, create_time, edit_user_uid,
         edit_time)
         values
         <foreach collection="list" item="item" separator=",">
-            (#{item.permissionUid},#{item.parentUid},#{item.permissionName},#{item.permissionCode},#{item.permissionType},#{item.requestMethod},#{item.menuUrl},#{item.permissionLevel},#{item.sort},#{item.iconStyle},#{item.createUserUid},#{item.createTime},#{item.editUserUid},#{item.editTime})
+            (#{item.uid},#{item.parentUid},#{item.permissionName},#{item.permissionCode},#{item.permissionType},#{item.requestMethod},#{item.menuUrl},
+             #{item.menuComponent}, #{item.permissionLevel},#{item.sort},#{item.iconStyle},#{item.createUserUid},#{item.createTime},#{item.editUserUid},#{item.editTime})
         </foreach>
     </insert>
 
     <!--批量删除-->
     <delete id="deleteBatch">
         delete from sys_permission
-        where permission_uid in
+        where uid in
         <foreach collection="list" item="item" separator="," open="(" close=")">
             #{item}
         </foreach>
@@ -90,8 +135,8 @@
         <include refid="Base_Column_List"/>
         from sys_permission
         <where>
-            <if test="record.permissionUid != null and record.permissionUid != ''">
-                and permission_uid = #{record.permissionUid}
+            <if test="record.uid != null and record.uid != ''">
+                and uid = #{record.uid}
             </if>
             <if test="record.parentUid != null and record.parentUid != ''">
                 and parent_uid = #{record.parentUid}
@@ -138,11 +183,11 @@
     <!--分页查询Count-->
     <select id="selectByPropertyCount" resultType="Long">
         select
-        count(permission_uid)
+        count(uid)
         from sys_permission
         <where>
-            <if test="record.permissionUid != null and record.permissionUid != ''">
-                and permission_uid = #{record.permissionUid}
+            <if test="record.uid != null and record.uid != ''">
+                and uid = #{record.uid}
             </if>
             <if test="record.parentUid != null and record.parentUid != ''">
                 and parent_uid = #{record.parentUid}
@@ -192,10 +237,138 @@
         select
         <include refid="Base_Column_List"/>
         from sys_permission
-        where permission_uid in
+        where uid in
         <foreach collection="list" item="item" separator="," open="(" close=")">
             #{item}
         </foreach> 
+    </select>
+
+    <!-- 获取子菜单 -->
+    <select id="selectChildMenuList" resultMap="SysPermissionMapTree">
+        select
+            sys_permission.*,sys_role_permission.role_uid as role_uid
+        from sys_permission
+        right join sys_role_permission on sys_permission.uid = sys_role_permission.uid
+        where sys_permission.parent_uid = #{uid} and sys_role_permission.role_uid = #{roleUid} and sys_permission.permission_type = 0
+        order by sys_permission.sort
+    </select>
+
+    <!-- 获取子菜单 -->
+    <select id="selectChildMenuList1" resultMap="SysPermissionMapTree1">
+        select
+        <include refid="Base_Column_List"/>
+        from sys_permission
+        where parent_uid = #{uid} and sys_permission.permission_type = 0
+        order by sort
+    </select>
+
+    <!--条件查询 层级结构-->
+    <select id="selectTreePage" resultMap="SysPermissionMapTree1">
+        select
+        <include refid="Base_Column_List"/>
+        from sys_permission
+        <where>
+            parent_uid is null
+            <if test="record.uid != null and record.uid != ''">
+                and uid = #{record.uid}
+            </if>
+            <if test="record.parentUid != null and record.parentUid != ''">
+                and parent_uid = #{record.parentUid}
+            </if>
+            <if test="record.permissionName != null and record.permissionName != ''">
+                and permission_name like concat('%', #{record.permissionName}, '%')
+            </if>
+            <if test="record.permissionCode != null and record.permissionCode != ''">
+                and permission_code = #{record.permissionCode}
+            </if>
+            <if test="record.permissionType != null">
+                and permission_type = #{record.permissionType}
+            </if>
+            <if test="record.requestMethod != null and record.requestMethod != ''">
+                and request_method = #{record.requestMethod}
+            </if>
+            <if test="record.menuUrl != null and record.menuUrl != ''">
+                and menu_url = #{record.menuUrl}
+            </if>
+            <if test="record.permissionLevel != null">
+                and permission_level = #{record.permissionLevel}
+            </if>
+            <if test="record.sort != null">
+                and sort = #{record.sort}
+            </if>
+            <if test="record.activeFlag != null">
+                and active_flag = #{record.activeFlag}
+            </if>
+            <if test="record.iconStyle != null and record.iconStyle != ''">
+                and icon_style = #{record.iconStyle}
+            </if>
+            <if test="record.createUserUid != null and record.createUserUid != ''">
+                and create_user_uid = #{record.createUserUid}
+            </if>
+            <if test="record.createTime != null">
+                and create_time = #{record.createTime}
+            </if>
+            <if test="record.updateUserUid != null and record.updateUserUid != ''">
+                and update_user_uid = #{record.updateUserUid}
+            </if>
+            <if test="record.updateTime != null">
+                and update_time = #{record.updateTime}
+            </if>
+        </where>
+        order by sort
+    </select>
+
+    <!-- 根据角色uid获取菜单-树形结构 -->
+    <select id="selectMenuByRoleUid" resultMap="SysPermissionMapTree">
+        select sys_permission.*, sys_role_permission.role_uid as role_uid
+        from sys_role_permission
+        right outer join sys_permission on sys_permission.uid = sys_role_permission.uid and parent_uid is null
+        where sys_role_permission.role_uid = #{roleUid} and sys_permission.permission_type = 0
+        order by sys_permission.sort
+    </select>
+
+    <!-- 根据权限名称查询权限记录 -->
+    <select id="selectByName" resultMap="SysPermissionMap">
+        select
+        <include refid="Base_Column_List"/>
+        from sys_permission
+        where permission_name = #{permissionName}
+    </select>
+
+    <!-- 获取所有父菜单 -->
+    <select id="selectParent" resultMap="SysPermissionMapTree1">
+        select
+        <include refid="Base_Column_List"/>
+        from sys_permission
+        where parent_uid is null
+        <if test="record.permissionType != null and record.permissionType != ''">
+            and permission_type = #{record.permissionType}
+        </if>
+    </select>
+
+    <!-- 根据uid集合查询父uid -->
+    <select id="selectParentUid" resultType="java.lang.String">
+        select parent_uid from sys_permission where uid in
+        <foreach collection="list" item="id" separator="," open="(" close=")">
+            #{id}
+        </foreach>
+    </select>
+
+    <!-- -->
+    <select id="selectByNameAndParentUid" resultMap="SysPermissionMap">
+        select
+        <include refid="Base_Column_List"/>
+        from sys_permission
+        <where>
+            permission_name = #{permissionName}
+            <if test="parentUid != null and parentUid != ''">
+                and parent_uid = #{parentUid}
+            </if>
+            <if test="parentUid == null">
+                and parent_uid is null
+            </if>
+        </where>
+        limit 1
     </select>
 
 </mapper>

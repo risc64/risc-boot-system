@@ -73,7 +73,7 @@ public class Token implements Serializable {
     /**
      * 令牌
      */
-    private String token;
+    private String jwtToken;
 
     /**
      * openid
@@ -91,14 +91,14 @@ public class Token implements Serializable {
     private String wxUnionId;
 
     /**
-     * 验证码uid
+     * 验证码缓存key
      */
-    private String verifyCodeUid;
+    private String captchaKey;
 
     /**
      * 验证码
      */
-    private String verifyCode;
+    private String captchaCode;
 
     /**
      * 是否首次登录

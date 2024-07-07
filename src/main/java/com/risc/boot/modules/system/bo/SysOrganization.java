@@ -20,7 +20,7 @@ public class SysOrganization implements Serializable {
     /**
     * uid
     */
-    private String organizationUid;
+    private String uid;
     
     /**
     * 组织名称

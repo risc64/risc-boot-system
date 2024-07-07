@@ -94,7 +94,7 @@ public class SysPermissionController {
     public Result<SysPermission> selectByKey(@RequestBody SysPermission record) {
         Result<SysPermission> result = new Result<>();
         try {
-            SysPermission record1 = sysPermissionService.selectByKey(record.getPermissionUid());
+            SysPermission record1 = sysPermissionService.selectByKey(record.getUid());
             if (record1 != null)  {
                 result.setStatusEnum(StatusEnum.OK, record1);
             } else {
@@ -116,7 +116,7 @@ public class SysPermissionController {
     @PostMapping(value = "sysPermission/add", produces = "application/json;charset=UTF-8")
     public Result<SysPermission> insert(@RequestBody SysPermission record) {
         Result<SysPermission> result = new Result<>();
-                record.setPermissionUid(UUID.randomUUID().toString().replace("-", ""));
+                record.setUid(UUID.randomUUID().toString().replace("-", ""));
                 try {
             int changeRow = sysPermissionService.insert(record);
             if (changeRow > 0)  {

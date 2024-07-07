@@ -1,5 +1,6 @@
 package com.risc.boot.modules.system.service;
 
+import com.risc.boot.common.bo.Result;
 import com.risc.boot.modules.system.bo.SysPermission;
 import java.util.List;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -16,10 +17,10 @@ public interface SysPermissionService {
 
     /**
      * 通过ID查询单条数据
-     * @param permissionUid 主键
+     * @param uid 主键
      * @return 实例对象
      */
-    SysPermission selectByKey(String permissionUid);
+    SysPermission selectByKey(String uid);
 
     /**
      * 新增数据
@@ -37,10 +38,10 @@ public interface SysPermissionService {
 
     /**
      * 通过主键删除数据
-     * @param permissionUid 主键
+     * @param uid 主键
      * @return 影响行数
      */
-    int deleteByKey(String permissionUid);
+    int deleteByKey(String uid);
     
     /**
      * 批量新增数据
@@ -84,4 +85,43 @@ public interface SysPermissionService {
      * @return 对象列表
      */
     List<SysPermission> selectByRoleUid(String roleUid);
+    
+    /**
+     * 根据角色uid查询菜单--层级结构
+     * @param roleUid
+     * @return
+     */
+    Result<List<SysPermission>> getMenuByRoleUid(String roleUid);
+    
+    /**
+     * 分页查询-层级结构
+     *
+     * @param page   分页信息
+     * @param record 实例对象
+     * @return 集合
+     */
+    IPage<SysPermission> selectTreePage(Page<SysPermission> page, SysPermission record);
+    
+    /**
+     * 通过权限名称查询权限记录
+     * @param permissionName
+     * @return
+     */
+    List<SysPermission> selectByName(String permissionName);
+    
+    /**
+     * 获取所有权限--层级结构
+     *
+     * @param record (对象可传permissionType)
+     * @return
+     */
+    Result<List<SysPermission>> selectParent(SysPermission record);
+    
+    /**
+     * 根据权限名和父uid查询权限
+     * @param permissionName
+     * @param parentUid
+     * @return
+     */
+    SysPermission selectByNameAndParentUid(String permissionName, String parentUid);
 }

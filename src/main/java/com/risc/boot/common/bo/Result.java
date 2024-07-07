@@ -66,4 +66,69 @@ public class Result<T> implements Serializable {
         this.setException(exception);
     }
     
+    /**
+     * 返回简单的成功信息
+     */
+    public void success(){
+        this.setStatus(StatusEnum.OK.getKey());
+        this.setMsg(StatusEnum.OK.getMsg());
+    }
+    
+    /**
+     * 返回带有数据的成功信息
+     * @param data
+     */
+    public void success(T data){
+        this.setStatus(StatusEnum.OK.getKey());
+        this.setMsg(StatusEnum.OK.getMsg());
+        if (data != null) {
+            this.data = data;
+        }
+    }
+    
+    /**
+     * 返回没有数据的成功信息
+     * 没有数据时不能返回错误
+     */
+    public void noData(){
+        this.setStatus(StatusEnum.NOT_DATA.getKey());
+        this.setMsg(StatusEnum.NOT_DATA.getMsg());
+    }
+    
+    /**
+     * 返回简单的错误信息
+     */
+    public void error(){
+        this.setStatus(StatusEnum.ERROR.getKey());
+        this.setMsg(StatusEnum.ERROR.getMsg());
+    }
+    
+    /**
+     * 返回带自定义消息的错误信息
+     * @param msg
+     */
+    public void error(String msg){
+        this.setStatus(StatusEnum.ERROR.getKey());
+        this.setMsg(msg);
+    }
+    
+    /**
+     * 返回枚举错误类型信息
+     * @param statusEnum
+     */
+    public void error(StatusEnum statusEnum){
+        this.setStatus(statusEnum.getKey());
+        this.setMsg(statusEnum.getMsg());
+    }
+    
+    /**
+     * 返回带有自定义消息的枚举错误类型信息
+     * @param statusEnum
+     * @param msg
+     */
+    public void error(StatusEnum statusEnum, String msg){
+        this.setStatus(statusEnum.getKey());
+        this.setMsg(msg);
+    }
+    
 }

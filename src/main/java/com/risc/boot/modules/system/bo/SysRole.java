@@ -20,7 +20,7 @@ public class SysRole implements Serializable {
     /**
     * 角色uid
     */
-    private String roleUid;
+    private String uid;
     
     /**
     * 角色名称

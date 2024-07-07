@@ -2,6 +2,8 @@ package com.risc.boot.modules.system.bo;
 
 import java.util.Date;
 import java.io.Serializable;
+import java.util.List;
+
 import lombok.Data;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -20,7 +22,7 @@ public class SysPermission implements Serializable {
     /**
     * 权限uid
     */
-    private String permissionUid;
+    private String uid;
     
     /**
     * 上一级权限uid
@@ -51,6 +53,11 @@ public class SysPermission implements Serializable {
     * 菜单路径（前端路由）
     */
     private String menuUrl;
+    
+    /**
+     * 前端页面
+     */
+    private String menuComponent;
     
     /**
     * 权限等级
@@ -91,6 +98,16 @@ public class SysPermission implements Serializable {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone="GMT+8")
     private Date editTime;
     
-
-
+    
+    //======一下为非表字段=====================
+    
+    /**
+     * 子菜单
+     */
+    private List<SysPermission> childList;
+    
+    /**
+     * 角色uid
+     */
+    private String roleUid;
 }

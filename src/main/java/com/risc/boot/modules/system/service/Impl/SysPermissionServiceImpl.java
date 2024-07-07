@@ -1,9 +1,13 @@
 package com.risc.boot.modules.system.service.Impl;
 
+import com.risc.boot.common.bo.Result;
+import com.risc.boot.common.util.ExceptionUtil;
 import com.risc.boot.modules.system.bo.SysPermission;
 import com.risc.boot.modules.system.dao.SysPermissionDao;
 import com.risc.boot.modules.system.dao.SysRolePermissionDao;
 import com.risc.boot.modules.system.service.SysPermissionService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -21,7 +25,9 @@ import java.util.List;
 @Service
 @Transactional
 public class SysPermissionServiceImpl implements SysPermissionService {
-
+    
+    private Logger logger = LoggerFactory.getLogger(this.getClass());
+    
     @Resource
     private SysPermissionDao sysPermissionDao;
     
@@ -30,12 +36,12 @@ public class SysPermissionServiceImpl implements SysPermissionService {
 
     /**
      * 通过ID查询单条数据
-     * @param permissionUid 主键
+     * @param uid 主键
      * @return 实例对象
      */
     @Override
-    public SysPermission selectByKey(String permissionUid) {
-        return sysPermissionDao.selectByKey(permissionUid);
+    public SysPermission selectByKey(String uid) {
+        return sysPermissionDao.selectByKey(uid);
     }
 
     /**
@@ -133,5 +139,61 @@ public class SysPermissionServiceImpl implements SysPermissionService {
         }
         return null;
     }
-
+    
+    @Override
+    public Result<List<SysPermission>> getMenuByRoleUid(String roleUid) {
+        Result<List<SysPermission>> result = new Result<>();
+        try {
+            List<SysPermission> list = sysPermissionDao.selectMenuByRoleUid(roleUid);
+            if (list != null && list.size() > 0) {
+                result.success(list);
+            } else {
+                result.noData();
+            }
+        } catch (Exception e) {
+            result.exception(e);
+            logger.error(ExceptionUtil.getErrorString(e));
+        }
+        return result;
+    }
+    
+    /**
+     * 分页查询--层级结构
+     *
+     * @param page
+     * @param record
+     * @return
+     */
+    @Override
+    public IPage<SysPermission> selectTreePage(Page<SysPermission> page, SysPermission record) {
+        return sysPermissionDao.selectTreePage(page, record);
+    }
+    
+    @Override
+    public List<SysPermission> selectByName(String permissionName) {
+        return sysPermissionDao.selectByName(permissionName);
+    }
+    
+    @Override
+    public Result<List<SysPermission>> selectParent(SysPermission record) {
+        Result<List<SysPermission>> result = new Result<>();
+        try {
+            List<SysPermission> list = sysPermissionDao.selectParent(record);
+            if (list != null && list.size() > 0) {
+                result.success(list);
+            } else {
+                result.noData();
+            }
+        } catch (Exception e) {
+            result.exception(e);
+            logger.error(ExceptionUtil.getErrorString(e));
+        }
+        return result;
+    }
+    
+    @Override
+    public SysPermission selectByNameAndParentUid(String permissionName, String parentUid) {
+        return sysPermissionDao.selectByNameAndParentUid(permissionName, parentUid);
+    }
+    
 }

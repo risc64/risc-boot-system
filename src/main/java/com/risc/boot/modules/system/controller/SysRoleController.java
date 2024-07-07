@@ -94,7 +94,7 @@ public class SysRoleController {
     public Result<SysRole> selectByKey(@RequestBody SysRole record) {
         Result<SysRole> result = new Result<>();
         try {
-            SysRole record1 = sysRoleService.selectByKey(record.getRoleUid());
+            SysRole record1 = sysRoleService.selectByKey(record.getUid());
             if (record1 != null)  {
                 result.setStatusEnum(StatusEnum.OK, record1);
             } else {
@@ -116,7 +116,7 @@ public class SysRoleController {
     @PostMapping(value = "sysRole/add", produces = "application/json;charset=UTF-8")
     public Result<SysRole> insert(@RequestBody SysRole record) {
         Result<SysRole> result = new Result<>();
-                record.setRoleUid(UUID.randomUUID().toString().replace("-", ""));
+                record.setUid(UUID.randomUUID().toString().replace("-", ""));
                 try {
             int changeRow = sysRoleService.insert(record);
             if (changeRow > 0)  {

@@ -8,6 +8,7 @@ public enum StatusEnum {
 	EXCEPTION("异常", 3),
 	PERMISSION_DENIED("没有权限", 4),
 	PARAM_ERROR("参数错误", 5),
+	CAPTCHA_CODE_ERROR("验证码错误", 5),
 	OVERDUEL("未登录或登录已过期", 7);
 
 	private String msg;

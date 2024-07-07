@@ -3,7 +3,7 @@
 <mapper namespace="com.risc.boot.modules.system.dao.SysRoleDao">
 
     <resultMap type="com.risc.boot.modules.system.bo.SysRole" id="SysRoleMap">
-        <result property="roleUid" column="role_uid" jdbcType="VARCHAR"/>
+        <result property="uid" column="uid" jdbcType="VARCHAR"/>
         <result property="roleName" column="role_name" jdbcType="VARCHAR"/>
         <result property="roleCode" column="role_code" jdbcType="VARCHAR"/>
         <result property="description" column="description" jdbcType="VARCHAR"/>
@@ -17,20 +17,20 @@
 
     <!-- 基本字段 -->
     <sql id="Base_Column_List">
-        role_uid, role_name, role_code, description, deleteable_flag, role_type, create_user_uid, create_time, edit_user_uid, edit_time    </sql>
+        uid, role_name, role_code, description, deleteable_flag, role_type, create_user_uid, create_time, edit_user_uid, edit_time    </sql>
 
     <!--通过ID查询单条数据-->
     <select id="selectByKey" resultMap="SysRoleMap">
         select
         <include refid="Base_Column_List"/>
         from sys_role
-        where role_uid = #{roleUid}
+        where uid = #{uid}
     </select>
 
     <!--新增数据-->
-    <insert id="insert" keyProperty="roleUid" useGeneratedKeys="true">
-        insert into sys_role(role_uid, role_name, role_code, description, deleteable_flag, role_type, create_user_uid, create_time, edit_user_uid, edit_time)
-        values (#{roleUid}, #{roleName}, #{roleCode}, #{description}, #{deleteableFlag}, #{roleType}, #{createUserUid}, #{createTime}, #{editUserUid}, #{editTime})
+    <insert id="insert" keyProperty="uid" useGeneratedKeys="true">
+        insert into sys_role(uid, role_name, role_code, description, deleteable_flag, role_type, create_user_uid, create_time, edit_user_uid, edit_time)
+        values (#{uid}, #{roleName}, #{roleCode}, #{description}, #{deleteableFlag}, #{roleType}, #{createUserUid}, #{createTime}, #{editUserUid}, #{editTime})
     </insert>
 
     <!--修改数据-->
@@ -47,29 +47,29 @@
             edit_user_uid = #{editUserUid},
             edit_time = #{editTime}
         </set>
-        where role_uid = #{roleUid}
+        where uid = #{uid}
     </update>
 
     <!--通过主键删除-->
     <delete id="deleteByKey">
         delete from sys_role 
-        where role_uid = #{roleUid}
+        where uid = #{uid}
     </delete>
 
     <!--批量新增-->
-    <insert id="insertBatch" keyProperty="roleUid" useGeneratedKeys="true">
-        insert into sys_role(role_uid, role_name, role_code, description, deleteable_flag, role_type, create_user_uid,
+    <insert id="insertBatch" keyProperty="uid" useGeneratedKeys="true">
+        insert into sys_role(uid, role_name, role_code, description, deleteable_flag, role_type, create_user_uid,
         create_time, edit_user_uid, edit_time)
         values
         <foreach collection="list" item="item" separator=",">
-            (#{item.roleUid},#{item.roleName},#{item.roleCode},#{item.description},#{item.deleteableFlag},#{item.roleType},#{item.createUserUid},#{item.createTime},#{item.editUserUid},#{item.editTime})
+            (#{item.uid},#{item.roleName},#{item.roleCode},#{item.description},#{item.deleteableFlag},#{item.roleType},#{item.createUserUid},#{item.createTime},#{item.editUserUid},#{item.editTime})
         </foreach>
     </insert>
 
     <!--批量删除-->
     <delete id="deleteBatch">
         delete from sys_role
-        where role_uid in
+        where uid in
         <foreach collection="list" item="item" separator="," open="(" close=")">
             #{item}
         </foreach>
@@ -81,8 +81,8 @@
         <include refid="Base_Column_List"/>
         from sys_role
         <where>
-            <if test="record.roleUid != null and record.roleUid != ''">
-                and role_uid = #{record.roleUid}
+            <if test="record.uid != null and record.uid != ''">
+                and uid = #{record.uid}
             </if>
             <if test="record.roleName != null and record.roleName != ''">
                 and role_name = #{record.roleName}
@@ -117,11 +117,11 @@
     <!--分页查询Count-->
     <select id="selectByPropertyCount" resultType="Long">
         select
-        count(role_uid)
+        count(uid)
         from sys_role
         <where>
-            <if test="record.roleUid != null and record.roleUid != ''">
-                and role_uid = #{record.roleUid}
+            <if test="record.uid != null and record.uid != ''">
+                and uid = #{record.uid}
             </if>
             <if test="record.roleName != null and record.roleName != ''">
                 and role_name = #{record.roleName}

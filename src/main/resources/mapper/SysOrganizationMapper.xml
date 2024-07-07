@@ -3,7 +3,7 @@
 <mapper namespace="com.risc.boot.modules.system.dao.SysOrganizationDao">
 
     <resultMap type="com.risc.boot.modules.system.bo.SysOrganization" id="SysOrganizationMap">
-        <result property="organizationUid" column="organization_uid" jdbcType="VARCHAR"/>
+        <result property="uid" column="uid" jdbcType="VARCHAR"/>
         <result property="organizationName" column="organization_name" jdbcType="VARCHAR"/>
         <result property="organizationCode" column="organization_code" jdbcType="VARCHAR"/>
         <result property="parentUid" column="parent_uid" jdbcType="VARCHAR"/>
@@ -24,20 +24,20 @@
 
     <!-- 基本字段 -->
     <sql id="Base_Column_List">
-        organization_uid, organization_name, organization_code, parent_uid, regist_id, artificial_person, address, phone, contact, description, province, city, area, create_user_uid, create_time, edit_user_uid, edit_time    </sql>
+        uid, organization_name, organization_code, parent_uid, regist_id, artificial_person, address, phone, contact, description, province, city, area, create_user_uid, create_time, edit_user_uid, edit_time    </sql>
 
     <!--通过ID查询单条数据-->
     <select id="selectByKey" resultMap="SysOrganizationMap">
         select
         <include refid="Base_Column_List"/>
         from sys_organization
-        where organization_uid = #{organizationUid}
+        where uid = #{uid}
     </select>
 
     <!--新增数据-->
-    <insert id="insert" keyProperty="organizationUid" useGeneratedKeys="true">
-        insert into sys_organization(organization_uid, organization_name, organization_code, parent_uid, regist_id, artificial_person, address, phone, contact, description, province, city, area, create_user_uid, create_time, edit_user_uid, edit_time)
-        values (#{organizationUid}, #{organizationName}, #{organizationCode}, #{parentUid}, #{registId}, #{artificialPerson}, #{address}, #{phone}, #{contact}, #{description}, #{province}, #{city}, #{area}, #{createUserUid}, #{createTime}, #{editUserUid}, #{editTime})
+    <insert id="insert" keyProperty="uid" useGeneratedKeys="true">
+        insert into sys_organization(uid, organization_name, organization_code, parent_uid, regist_id, artificial_person, address, phone, contact, description, province, city, area, create_user_uid, create_time, edit_user_uid, edit_time)
+        values (#{uid}, #{organizationName}, #{organizationCode}, #{parentUid}, #{registId}, #{artificialPerson}, #{address}, #{phone}, #{contact}, #{description}, #{province}, #{city}, #{area}, #{createUserUid}, #{createTime}, #{editUserUid}, #{editTime})
     </insert>
 
     <!--修改数据-->
@@ -61,30 +61,30 @@
             edit_user_uid = #{editUserUid},
             edit_time = #{editTime}
         </set>
-        where organization_uid = #{organizationUid}
+        where uid = #{uid}
     </update>
 
     <!--通过主键删除-->
     <delete id="deleteByKey">
         delete from sys_organization 
-        where organization_uid = #{organizationUid}
+        where uid = #{uid}
     </delete>
 
     <!--批量新增-->
-    <insert id="insertBatch" keyProperty="organizationUid" useGeneratedKeys="true">
-        insert into sys_organization(organization_uid, organization_name, organization_code, parent_uid, regist_id,
+    <insert id="insertBatch" keyProperty="uid" useGeneratedKeys="true">
+        insert into sys_organization(uid, organization_name, organization_code, parent_uid, regist_id,
         artificial_person, address, phone, contact, description, province, city, area, create_user_uid, create_time,
         edit_user_uid, edit_time)
         values
         <foreach collection="list" item="item" separator=",">
-            (#{item.organizationUid},#{item.organizationName},#{item.organizationCode},#{item.parentUid},#{item.registId},#{item.artificialPerson},#{item.address},#{item.phone},#{item.contact},#{item.description},#{item.province},#{item.city},#{item.area},#{item.createUserUid},#{item.createTime},#{item.editUserUid},#{item.editTime})
+            (#{item.uid},#{item.organizationName},#{item.organizationCode},#{item.parentUid},#{item.registId},#{item.artificialPerson},#{item.address},#{item.phone},#{item.contact},#{item.description},#{item.province},#{item.city},#{item.area},#{item.createUserUid},#{item.createTime},#{item.editUserUid},#{item.editTime})
         </foreach>
     </insert>
 
     <!--批量删除-->
     <delete id="deleteBatch">
         delete from sys_organization
-        where organization_uid in
+        where uid in
         <foreach collection="list" item="item" separator="," open="(" close=")">
             #{item}
         </foreach>
@@ -96,8 +96,8 @@
         <include refid="Base_Column_List"/>
         from sys_organization
         <where>
-            <if test="record.organizationUid != null and record.organizationUid != ''">
-                and organization_uid = #{record.organizationUid}
+            <if test="record.uid != null and record.uid != ''">
+                and uid = #{record.uid}
             </if>
             <if test="record.organizationName != null and record.organizationName != ''">
                 and organization_name = #{record.organizationName}
@@ -153,11 +153,11 @@
     <!--分页查询Count-->
     <select id="selectByPropertyCount" resultType="Long">
         select
-        count(organization_uid)
+        count(uid)
         from sys_organization
         <where>
-            <if test="record.organizationUid != null and record.organizationUid != ''">
-                and organization_uid = #{record.organizationUid}
+            <if test="record.uid != null and record.uid != ''">
+                and uid = #{record.uid}
             </if>
             <if test="record.organizationName != null and record.organizationName != ''">
                 and organization_name = #{record.organizationName}

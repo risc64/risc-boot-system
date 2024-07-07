@@ -93,7 +93,7 @@ public class SysOrganizationController {
     public Result<SysOrganization> selectByKey(@RequestBody SysOrganization record) {
         Result<SysOrganization> result = new Result<>();
         try {
-            SysOrganization record1 = sysOrganizationService.selectByKey(record.getOrganizationUid());
+            SysOrganization record1 = sysOrganizationService.selectByKey(record.getUid());
             if (record1 != null)  {
                 result.setStatusEnum(StatusEnum.OK, record1);
             } else {
@@ -115,7 +115,7 @@ public class SysOrganizationController {
     @PostMapping(value = "sysOrganization/add", produces = "application/json;charset=UTF-8")
     public Result<SysOrganization> insert(@RequestBody SysOrganization record) {
         Result<SysOrganization> result = new Result<>();
-                record.setOrganizationUid(UUID.randomUUID().toString().replace("-", ""));
+                record.setUid(UUID.randomUUID().toString().replace("-", ""));
                 try {
             int changeRow = sysOrganizationService.insert(record);
             if (changeRow > 0)  {

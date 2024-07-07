@@ -1,5 +1,6 @@
 package com.risc.boot.modules.system.service;
 
+import com.risc.boot.common.bo.Captcha;
 import com.risc.boot.common.bo.Result;
 import com.risc.boot.common.bo.Token;
 
@@ -12,11 +13,10 @@ import com.risc.boot.common.bo.Token;
 public interface LoginService {
     /**
      * 登录
-     * @param userName
-     * @param password
+     * @param record
      * @return
      */
-    Result<Token> login(String userName, String password);
+    Result<Token> login(Token record);
 
     /**
      * 注销
@@ -24,4 +24,11 @@ public interface LoginService {
      * @return
      */
     Result<Token> logout(String token);
+    
+    /**
+     * 获取验证码
+     * @return
+     */
+    Result<Captcha> captcha();
+    
 }

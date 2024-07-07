@@ -1,5 +1,6 @@
 package com.risc.boot.modules.system.controller;
 
+import com.risc.boot.common.bo.Captcha;
 import com.risc.boot.common.bo.Result;
 import com.risc.boot.common.bo.StatusEnum;
 import com.risc.boot.common.bo.Token;
@@ -31,11 +32,11 @@ public class LoginController {
     
     
 
-    @PostMapping(value = "login", produces = "application/json;charset=UTF-8")
+    @PostMapping(value = "auth/login", produces = "application/json;charset=UTF-8")
     public Result<Token> login(@RequestBody Token record) {
         Result<Token> result = new Result<>();
         try {
-            result = loginService.login(record.getUserName(), record.getPassWord());
+            result = loginService.login(record);
         } catch (Exception e) {
             result.exception(StatusEnum.EXCEPTION);
             logger.error(ExceptionUtil.getErrorString(e));
@@ -43,7 +44,7 @@ public class LoginController {
         return result;
     }
 
-    @PostMapping(value = "logout", produces = "application/json;charset=UTF-8")
+    @PostMapping(value = "auth/logout", produces = "application/json;charset=UTF-8")
     public Result<Token> logout(HttpServletRequest request) {
         Result<Token> result = new Result<>();
         try {
@@ -53,6 +54,18 @@ public class LoginController {
             } else {
                 result.setStatusEnum(StatusEnum.OVERDUEL, null);
             }
+        } catch (Exception e) {
+            result.exception(StatusEnum.EXCEPTION);
+            logger.error(ExceptionUtil.getErrorString(e));
+        }
+        return result;
+    }
+    
+    @PostMapping(value = "auth/captcha", produces = "application/json;charset=UTF-8")
+    public Result<Captcha> captcha() {
+        Result<Captcha> result = new Result<>();
+        try {
+            result = loginService.captcha();
         } catch (Exception e) {
             result.exception(StatusEnum.EXCEPTION);
             logger.error(ExceptionUtil.getErrorString(e));
