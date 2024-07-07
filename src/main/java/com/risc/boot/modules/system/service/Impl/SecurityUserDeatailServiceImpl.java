@@ -45,7 +45,7 @@ public class SecurityUserDeatailServiceImpl implements UserDetailsService {
             throw new UsernameNotFoundException("用户不存在");
         }
         // 根据用户获取角色uid
-        List<SysPermission> sysPermissionList = sysPermissionService.selectByUserUid(sysUser.getUserUid());
+        List<SysPermission> sysPermissionList = sysPermissionService.selectByUserUid(sysUser.getUid());
         List<String> codeList = sysPermissionList.stream().map(e-> e.getPermissionCode()).collect(Collectors.toList());
         List<GrantedAuthority> authorities = new ArrayList<>();
         redisUtil.set(username, StringUtils.join(codeList,","),8 * 60 * 60);

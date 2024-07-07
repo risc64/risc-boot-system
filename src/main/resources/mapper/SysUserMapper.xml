@@ -3,7 +3,7 @@
 <mapper namespace="com.risc.boot.modules.system.dao.SysUserDao">
 
     <resultMap type="com.risc.boot.modules.system.bo.SysUser" id="SysUserMap">
-        <result property="userUid" column="user_uid" jdbcType="VARCHAR"/>
+        <result property="uid" column="uid" jdbcType="VARCHAR"/>
         <result property="userName" column="user_name" jdbcType="VARCHAR"/>
         <result property="userNick" column="user_nick" jdbcType="VARCHAR"/>
         <result property="passWord" column="pass_word" jdbcType="VARCHAR"/>
@@ -26,20 +26,20 @@
 
     <!-- 基本字段 -->
     <sql id="Base_Column_List">
-        user_uid, user_name, user_nick, pass_word, salt, open_uid, sex, user_status, email, profile_picture, mobile, province, city, area, address, create_user_uid, create_time, update_user_uid, update_time    </sql>
+        uid, user_name, user_nick, pass_word, salt, open_uid, sex, user_status, email, profile_picture, mobile, province, city, area, address, create_user_uid, create_time, update_user_uid, update_time    </sql>
 
     <!--通过ID查询单条数据-->
     <select id="selectByKey" resultMap="SysUserMap">
         select
         <include refid="Base_Column_List"/>
         from sys_user
-        where user_uid = #{userUid}
+        where uid = #{uid}
     </select>
 
     <!--新增数据-->
-    <insert id="insert" keyProperty="userUid" useGeneratedKeys="true">
-        insert into sys_user(user_uid, user_name, user_nick, pass_word, salt, open_uid, sex, user_status, email, profile_picture, mobile, province, city, area, address, create_user_uid, create_time, update_user_uid, update_time)
-        values (#{userUid}, #{userName}, #{userNick}, #{passWord}, #{salt}, #{openUid}, #{sex}, #{userStatus}, #{email}, #{profilePicture}, #{mobile}, #{province}, #{city}, #{area}, #{address}, #{createUserUid}, #{createTime}, #{updateUserUid}, #{updateTime})
+    <insert id="insert" keyProperty="uid" useGeneratedKeys="true">
+        insert into sys_user(uid, user_name, user_nick, pass_word, salt, open_uid, sex, user_status, email, profile_picture, mobile, province, city, area, address, create_user_uid, create_time, update_user_uid, update_time)
+        values (#{uid}, #{userName}, #{userNick}, #{passWord}, #{salt}, #{openUid}, #{sex}, #{userStatus}, #{email}, #{profilePicture}, #{mobile}, #{province}, #{city}, #{area}, #{address}, #{createUserUid}, #{createTime}, #{updateUserUid}, #{updateTime})
     </insert>
 
     <!--修改数据-->
@@ -65,30 +65,30 @@
             update_user_uid = #{updateUserUid},
             update_time = #{updateTime}
         </set>
-        where user_uid = #{userUid}
+        where uid = #{uid}
     </update>
 
     <!--通过主键删除-->
     <delete id="deleteByKey">
         delete from sys_user 
-        where user_uid = #{userUid}
+        where uid = #{uid}
     </delete>
 
     <!--批量新增-->
-    <insert id="insertBatch" keyProperty="userUid" useGeneratedKeys="true">
-        insert into sys_user(user_uid, user_name, user_nick, pass_word, salt, open_uid, sex, user_status, email,
+    <insert id="insertBatch" keyProperty="uid" useGeneratedKeys="true">
+        insert into sys_user(uid, user_name, user_nick, pass_word, salt, open_uid, sex, user_status, email,
         profile_picture, mobile, province, city, area, address, create_user_uid, create_time, update_user_uid,
         update_time)
         values
         <foreach collection="list" item="item" separator=",">
-            (#{item.userUid},#{item.userName},#{item.userNick},#{item.passWord},#{item.salt},#{item.openUid},#{item.sex},#{item.userStatus},#{item.email},#{item.profilePicture},#{item.mobile},#{item.province},#{item.city},#{item.area},#{item.address},#{item.createUserUid},#{item.createTime},#{item.updateUserUid},#{item.updateTime})
+            (#{item.uid},#{item.userName},#{item.userNick},#{item.passWord},#{item.salt},#{item.openUid},#{item.sex},#{item.userStatus},#{item.email},#{item.profilePicture},#{item.mobile},#{item.province},#{item.city},#{item.area},#{item.address},#{item.createUserUid},#{item.createTime},#{item.updateUserUid},#{item.updateTime})
         </foreach>
     </insert>
 
     <!--批量删除-->
     <delete id="deleteBatch">
         delete from sys_user
-        where user_uid in
+        where uid in
         <foreach collection="list" item="item" separator="," open="(" close=")">
             #{item}
         </foreach>
@@ -100,8 +100,8 @@
         <include refid="Base_Column_List"/>
         from sys_user
         <where>
-            <if test="record.userUid != null and record.userUid != ''">
-                and user_uid = #{record.userUid}
+            <if test="record.uid != null and record.uid != ''">
+                and uid = #{record.uid}
             </if>
             <if test="record.userName != null and record.userName != ''">
                 and user_name = #{record.userName}
@@ -163,11 +163,11 @@
     <!--分页查询Count-->
     <select id="selectByPropertyCount" resultType="Long">
         select
-        count(user_uid)
+        count(uid)
         from sys_user
         <where>
-            <if test="record.userUid != null and record.userUid != ''">
-                and user_uid = #{record.userUid}
+            <if test="record.uid != null and record.uid != ''">
+                and uid = #{record.uid}
             </if>
             <if test="record.userName != null and record.userName != ''">
                 and user_name = #{record.userName}
@@ -252,13 +252,13 @@
     
     
     <select id="selectTokenByUserName" resultMap="TokenMap">
-        SELECT sys_user.user_uid, sys_user.user_name, sys_user.user_nick, sys_user.pass_word, sys_user.open_uid, sys_user.profile_picture,
+        SELECT sys_user.uid user_uid, sys_user.user_name, sys_user.user_nick, sys_user.pass_word, sys_user.open_uid, sys_user.profile_picture,
         sys_role.role_uid, sys_role.role_name, sys_organization.organization_uid, sys_organization.organization_name, 
         sys_organization.organization_code
         FROM sys_user
-        LEFT JOIN sys_user_role on sys_user.user_uid = sys_user_role.user_uid
+        LEFT JOIN sys_user_role on sys_user.uid = sys_user_role.uid
         LEFT JOIN sys_role on sys_role.role_uid = sys_user_role.role_uid
-        LEFT JOIN sys_user_organization on sys_user.user_uid = sys_user_organization.organization_uid
+        LEFT JOIN sys_user_organization on sys_user.uid = sys_user_organization.organization_uid
         LEFT JOIN sys_organization on sys_organization.organization_uid = sys_user_organization.organization_uid
         WHERE user_name = #{userName}
     </select>

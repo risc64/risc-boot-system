@@ -20,7 +20,7 @@ public class SysUser implements Serializable {
     /**
     * 用户uid
     */
-    private String userUid;
+    private String uid;
     
     /**
     * 用户账号

@@ -94,7 +94,7 @@ public class SysUserController {
     public Result<SysUser> selectByKey(@RequestBody SysUser record) {
         Result<SysUser> result = new Result<>();
         try {
-            SysUser record1 = sysUserService.selectByKey(record.getUserUid());
+            SysUser record1 = sysUserService.selectByKey(record.getUid());
             if (record1 != null)  {
                 result.setStatusEnum(StatusEnum.OK, record1);
             } else {
@@ -116,7 +116,7 @@ public class SysUserController {
     @PostMapping(value = "sysUser/add", produces = "application/json;charset=UTF-8")
     public Result<SysUser> insert(@RequestBody SysUser record) {
         Result<SysUser> result = new Result<>();
-                record.setUserUid(UUID.randomUUID().toString().replace("-", ""));
+                record.setUid(UUID.randomUUID().toString().replace("-", ""));
                 try {
             int changeRow = sysUserService.insert(record);
             if (changeRow > 0)  {
