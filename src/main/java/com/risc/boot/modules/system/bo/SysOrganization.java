@@ -2,6 +2,8 @@ package com.risc.boot.modules.system.bo;
 
 import java.util.Date;
 import java.io.Serializable;
+import java.util.List;
+
 import lombok.Data;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -107,5 +109,8 @@ public class SysOrganization implements Serializable {
     private Date editTime;
     
 
-
+    private List<SysOrganization> children;
+    
+    private String childrenUidStr;
+    
 }

@@ -55,6 +55,8 @@ public interface SysOrganizationDao {
      */
     int deleteBatch(List<String> list);
     
+    
+    
     /**
      * 条件查询
      * @param record 实例对象
