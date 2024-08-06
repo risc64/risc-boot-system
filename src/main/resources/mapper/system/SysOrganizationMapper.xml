@@ -85,7 +85,7 @@
     <!--新增数据-->
     <insert id="insert" keyProperty="uid" useGeneratedKeys="true">
         insert into sys_organization(uid, organization_name, organization_code, parent_uid, regist_id, artificial_person, address, phone, contact, description, province, city, area, create_user_uid, create_time, edit_user_uid, edit_time)
-        values (#{uid}, #{organizationName}, #{organizationCode}, #{parentUid}, #{registId}, #{artificialPerson}, #{address}, #{phone}, #{contact}, #{description}, #{province}, #{city}, #{area}, #{createUserUid}, #{createTime}, #{editUserUid}, #{editTime})
+        values (#{uid}, #{organizationName}, #{organizationCode}, #{parentUid}, #{registId}, #{artificialPerson}, #{address}, #{phone}, #{contact}, #{description}, #{province}, #{city}, #{area}, #{createUserUid}, now(), #{editUserUid}, #{editTime})
     </insert>
 
     <!--修改数据-->
@@ -104,10 +104,8 @@
             province = #{province},
             city = #{city},
             area = #{area},
-            create_user_uid = #{createUserUid},
-            create_time = #{createTime},
             edit_user_uid = #{editUserUid},
-            edit_time = #{editTime}
+            edit_time = now()
         </set>
         where uid = #{uid}
     </update>
@@ -125,7 +123,7 @@
         edit_user_uid, edit_time)
         values
         <foreach collection="list" item="item" separator=",">
-            (#{item.uid},#{item.organizationName},#{item.organizationCode},#{item.parentUid},#{item.registId},#{item.artificialPerson},#{item.address},#{item.phone},#{item.contact},#{item.description},#{item.province},#{item.city},#{item.area},#{item.createUserUid},#{item.createTime},#{item.editUserUid},#{item.editTime})
+            (#{item.uid},#{item.organizationName},#{item.organizationCode},#{item.parentUid},#{item.registId},#{item.artificialPerson},#{item.address},#{item.phone},#{item.contact},#{item.description},#{item.province},#{item.city},#{item.area},#{item.createUserUid},now(),#{item.editUserUid},#{item.editTime})
         </foreach>
     </insert>
 
@@ -257,6 +255,7 @@
                 and o.edit_time = #{record.editTime}
             </if>
         </where>
+        order by o.create_time desc
     </select>
 
     <!--分页查询Count-->
@@ -265,11 +264,12 @@
         count(uid)
         from sys_organization
         <where>
+            parent_uid is null
             <if test="record.uid != null and record.uid != ''">
                 and uid = #{record.uid}
             </if>
             <if test="record.organizationName != null and record.organizationName != ''">
-                and organization_name = #{record.organizationName}
+                and organization_name like concat('%',#{record.organizationName},'%')
             </if>
             <if test="record.organizationCode != null and record.organizationCode != ''">
                 and organization_code = #{record.organizationCode}
