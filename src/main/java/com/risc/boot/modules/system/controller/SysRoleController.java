@@ -1,6 +1,9 @@
 package com.risc.boot.modules.system.controller;
 
+import com.risc.boot.modules.system.bo.SysPermission;
 import com.risc.boot.modules.system.bo.SysRole;
+import com.risc.boot.modules.system.bo.SysRolePermission;
+import com.risc.boot.modules.system.service.SysRolePermissionService;
 import com.risc.boot.modules.system.service.SysRoleService;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -31,6 +34,9 @@ public class SysRoleController {
      */
     @Resource
     private SysRoleService sysRoleService;
+    
+    @Resource
+    private SysRolePermissionService sysRolePermissionService;
 
     /**
      * 分页查询
@@ -176,4 +182,6 @@ public class SysRoleController {
         }
         return result;
     }
+    
+   
 }

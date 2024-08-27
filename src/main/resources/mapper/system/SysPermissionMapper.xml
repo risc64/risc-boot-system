@@ -62,9 +62,32 @@
                     select="selectChildMenuList1"></collection>
     </resultMap>
 
+    <resultMap type="com.risc.boot.modules.system.bo.SysPermission" id="SysPermissionMapTree2">
+        <result property="uid" column="uid" jdbcType="VARCHAR"/>
+        <result property="parentUid" column="parent_uid" jdbcType="VARCHAR"/>
+        <result property="permissionName" column="permission_name" jdbcType="VARCHAR"/>
+        <result property="permissionCode" column="permission_code" jdbcType="VARCHAR"/>
+        <result property="permissionType" column="permission_type" jdbcType="INTEGER"/>
+        <result property="requestMethod" column="request_method" jdbcType="VARCHAR"/>
+        <result property="menuUrl" column="menu_url" jdbcType="VARCHAR"/>
+        <result property="menuComponent" column="menu_component" jdbcType="VARCHAR"/>
+        <result property="permissionLevel" column="permission_level" jdbcType="INTEGER"/>
+        <result property="sort" column="sort" jdbcType="INTEGER"/>
+        <result property="iconStyle" column="icon_style" jdbcType="VARCHAR"/>
+        <result property="createUserUid" column="create_user_uid" jdbcType="VARCHAR"/>
+        <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+        <result property="editUserUid" column="update_user_uid" jdbcType="VARCHAR"/>
+        <result property="editTime" column="update_time" jdbcType="TIMESTAMP"/>
+        <result property="childUidStr" column="child_uid_str" jdbcType="VARCHAR"/>
+        <collection property="childList" column="{parentUid = uid, childUidStr=child_uid_str}"
+                    ofType="com.risc.boot.modules.system.bo.SysPermission" javaType="java.util.ArrayList"
+                    select="selectChildMenuList2"></collection>
+    </resultMap>
+
     <!-- 基本字段 -->
     <sql id="Base_Column_List">
-        uid, parent_uid, permission_name, permission_code, permission_type, request_method, menu_url, menu_component, permission_level, sort, icon_style, create_user_uid, create_time, edit_user_uid, edit_time    </sql>
+        uid, parent_uid, permission_name, permission_code, permission_type, request_method, menu_url, menu_component, permission_level, sort, icon_style, create_user_uid, create_time, edit_user_uid, edit_time
+    </sql>
 
     <!--通过ID查询单条数据-->
     <select id="selectByKey" resultMap="SysPermissionMap">
@@ -77,7 +100,7 @@
     <!--新增数据-->
     <insert id="insert" keyProperty="uid" useGeneratedKeys="true">
         insert into sys_permission(uid, parent_uid, permission_name, permission_code, permission_type, request_method, menu_url, menu_component, permission_level, sort, icon_style, create_user_uid, create_time, edit_user_uid, edit_time)
-        values (#{uid}, #{parentUid}, #{permissionName}, #{permissionCode}, #{permissionType}, #{requestMethod}, #{menuUrl}, #{menuComponent}, #{permissionLevel}, #{sort}, #{iconStyle}, #{createUserUid}, #{createTime}, #{editUserUid}, #{editTime})
+        values (#{uid}, #{parentUid}, #{permissionName}, #{permissionCode}, #{permissionType}, #{requestMethod}, #{menuUrl}, #{menuComponent}, #{permissionLevel}, #{sort}, #{iconStyle}, #{createUserUid}, now(), #{editUserUid}, #{editTime})
     </insert>
 
     <!--修改数据-->
@@ -94,10 +117,8 @@
             permission_level = #{permissionLevel},
             sort = #{sort},
             icon_style = #{iconStyle},
-            create_user_uid = #{createUserUid},
-            create_time = #{createTime},
             edit_user_uid = #{editUserUid},
-            edit_time = #{editTime}
+            edit_time = now()
         </set>
         where uid = #{uid}
     </update>
@@ -116,7 +137,7 @@
         values
         <foreach collection="list" item="item" separator=",">
             (#{item.uid},#{item.parentUid},#{item.permissionName},#{item.permissionCode},#{item.permissionType},#{item.requestMethod},#{item.menuUrl},
-             #{item.menuComponent}, #{item.permissionLevel},#{item.sort},#{item.iconStyle},#{item.createUserUid},#{item.createTime},#{item.editUserUid},#{item.editTime})
+             #{item.menuComponent}, #{item.permissionLevel},#{item.sort},#{item.iconStyle},#{item.createUserUid},now(),#{item.editUserUid},#{item.editTime})
         </foreach>
     </insert>
 
@@ -229,6 +250,182 @@
                 and edit_time = #{record.editTime}
             </if>
         </where>
+    </select>
+
+    <!--条件查询 注意：修改此sql时须同时修改 分页查询Count ，并去掉不必要的外联、排序等，保证分页查询总页数正确 -->
+    <select id="selectByPropertyTree" resultMap="SysPermissionMapTree2">
+        select
+            p.uid, p.parent_uid, p.permission_name, p.permission_code, p.permission_type, p.request_method, p.menu_url, p.menu_component,
+            p.permission_level, p.sort, p.icon_style, p.create_user_uid, p.create_time, p.edit_user_uid, p.edit_time, a.child_uid_str
+        from sys_permission p
+        left join (
+            select parent_uid, GROUP_CONCAT(uid) child_uid_str
+            from sys_permission
+            <where>
+                parent_uid is not null
+                <if test="record.uid != null and record.uid != ''">
+                    and uid = #{record.uid}
+                </if>
+                <if test="record.permissionName != null and record.permissionName != ''">
+                    and (permission_name like concat('%',#{record.permissionName},'%') or
+                    uid in (select parent_uid from sys_permission where permission_name like concat('%',#{record.permissionName},'%'))
+                    )
+                </if>
+                <if test="record.permissionCode != null and record.permissionCode != ''">
+                    and permission_code = #{record.permissionCode}
+                </if>
+                <if test="record.permissionType != null">
+                    and permission_type = #{record.permissionType}
+                </if>
+                <if test="record.requestMethod != null and record.requestMethod != ''">
+                    and request_method = #{record.requestMethod}
+                </if>
+                <if test="record.menuUrl != null and record.menuUrl != ''">
+                    and menu_url = #{record.menuUrl}
+                </if>
+                <if test="record.permissionLevel != null">
+                    and permission_level = #{record.permissionLevel}
+                </if>
+                <if test="record.sort != null">
+                    and sort = #{record.sort}
+                </if>
+                <if test="record.iconStyle != null and record.iconStyle != ''">
+                    and icon_style = #{record.iconStyle}
+                </if>
+                <if test="record.createUserUid != null and record.createUserUid != ''">
+                    and create_user_uid = #{record.createUserUid}
+                </if>
+                <if test="record.createTime != null">
+                    and create_time = #{record.createTime}
+                </if>
+                <if test="record.editUserUid != null and record.editUserUid != ''">
+                    and edit_user_uid = #{record.editUserUid}
+                </if>
+                <if test="record.editTime != null">
+                    and edit_time = #{record.editTime}
+                </if>
+            </where>
+        ) a on a.parent_uid = p.uid
+        <where>
+            p.parent_uid is null
+            <if test="record.uid != null and record.uid != ''">
+                and p.uid = #{record.uid}
+            </if>
+            <if test="record.permissionName != null and record.permissionName != ''">
+                and (p.permission_name like concat('%',#{record.permissionName},'%') or
+                p.uid in (select parent_uid from sys_permission where permission_name like concat('%',#{record.permissionName},'%'))
+                )
+            </if>
+            <if test="record.permissionCode != null and record.permissionCode != ''">
+                and p.permission_code = #{record.permissionCode}
+            </if>
+            <if test="record.permissionType != null">
+                and p.permission_type = #{record.permissionType}
+            </if>
+            <if test="record.requestMethod != null and record.requestMethod != ''">
+                and p.request_method = #{record.requestMethod}
+            </if>
+            <if test="record.menuUrl != null and record.menuUrl != ''">
+                and p.menu_url = #{record.menuUrl}
+            </if>
+            <if test="record.permissionLevel != null">
+                and p.permission_level = #{record.permissionLevel}
+            </if>
+            <if test="record.sort != null">
+                and p.sort = #{record.sort}
+            </if>
+            <if test="record.iconStyle != null and record.iconStyle != ''">
+                and p.icon_style = #{record.iconStyle}
+            </if>
+            <if test="record.createUserUid != null and record.createUserUid != ''">
+                and p.create_user_uid = #{record.createUserUid}
+            </if>
+            <if test="record.createTime != null">
+                and p.create_time = #{record.createTime}
+            </if>
+            <if test="record.editUserUid != null and record.editUserUid != ''">
+                and p.edit_user_uid = #{record.editUserUid}
+            </if>
+            <if test="record.editTime != null">
+                and p.edit_time = #{record.editTime}
+            </if>
+        </where>
+        order by p.sort
+    </select>
+
+    <!--分页查询Count-->
+    <select id="selectByPropertyCountTree" resultType="Long">
+        select
+        count(uid)
+        from sys_permission p
+        <where>
+            p.parent_uid is null
+            <if test="record.uid != null and record.uid != ''">
+                and p.uid = #{record.uid}
+            </if>
+            <if test="record.permissionName != null and record.permissionName != ''">
+                and (p.permission_name like concat('%',#{record.permissionName},'%') or
+                p.uid in (select parent_uid from sys_permission where permission_name like concat('%',#{record.permissionName},'%'))
+                )
+            </if>
+            <if test="record.permissionCode != null and record.permissionCode != ''">
+                and p.permission_code = #{record.permissionCode}
+            </if>
+            <if test="record.permissionType != null">
+                and p.permission_type = #{record.permissionType}
+            </if>
+            <if test="record.requestMethod != null and record.requestMethod != ''">
+                and p.request_method = #{record.requestMethod}
+            </if>
+            <if test="record.menuUrl != null and record.menuUrl != ''">
+                and p.menu_url = #{record.menuUrl}
+            </if>
+            <if test="record.permissionLevel != null">
+                and p.permission_level = #{record.permissionLevel}
+            </if>
+            <if test="record.sort != null">
+                and p.sort = #{record.sort}
+            </if>
+            <if test="record.iconStyle != null and record.iconStyle != ''">
+                and p.icon_style = #{record.iconStyle}
+            </if>
+            <if test="record.createUserUid != null and record.createUserUid != ''">
+                and p.create_user_uid = #{record.createUserUid}
+            </if>
+            <if test="record.createTime != null">
+                and p.create_time = #{record.createTime}
+            </if>
+            <if test="record.editUserUid != null and record.editUserUid != ''">
+                and p.edit_user_uid = #{record.editUserUid}
+            </if>
+            <if test="record.editTime != null">
+                and p.edit_time = #{record.editTime}
+            </if>
+        </where>
+    </select>
+
+    <select id="selectChildMenuList2" resultMap="SysPermissionMapTree2">
+        select
+        p.uid, p.parent_uid, p.permission_name, p.permission_code, p.permission_type, p.request_method, p.menu_url, p.menu_component,
+        p.permission_level, p.sort, p.icon_style, p.create_user_uid, p.create_time, p.edit_user_uid, p.edit_time, a.child_uid_str
+        from sys_permission p
+        left join (
+            SELECT parent_uid, GROUP_CONCAT(uid) child_uid_str
+            FROM sys_permission
+            <where>
+                parent_uid is not null
+                <if test="childUidStr != null and childUidStr != ''">
+                    and find_in_set(uid, #{childUidStr})
+                </if>
+            </where>
+        ) a on p.uid = a.parent_uid
+        <where>
+            p.parent_uid = #{parentUid}
+            <if test="childUidStr != null and childUidStr != ''">
+                and  find_in_set(p.uid, #{childUidStr})
+            </if>
+        </where>
+        order by p.sort
     </select>
 
 

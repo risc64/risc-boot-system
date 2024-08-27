@@ -105,4 +105,25 @@
         WHERE role_uid = #{roleUid}
     </select>
 
+    <!--通过角色uid删除-->
+    <delete id="deleteByRoleUid">
+        delete from sys_role_permission
+        where role_uid = #{roleUid}
+    </delete>
+
+    <select id="selectByRoleUid" resultType="java.lang.String">
+        select permission_uid
+        from sys_role_permission
+        where role_uid = #{roleUid}
+    </select>
+
+    <!--新增-->
+    <insert id="replaceAdd">
+        insert into sys_role_permission(role_uid, permission_uid)
+        values
+        <foreach collection="record.permissionUidList" item="item" separator=",">
+            (#{record.roleUid},#{item})
+        </foreach>
+    </insert>
+
 </mapper>

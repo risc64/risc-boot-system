@@ -4,6 +4,7 @@ import com.risc.boot.modules.system.bo.SysRolePermission;
 import java.util.List;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.risc.boot.modules.system.dto.SysRolePermissionDto;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.stereotype.Service;
 
@@ -69,6 +70,23 @@ public interface SysRolePermissionService {
      * @return 对象列表
      */
     IPage<SysRolePermission> selectPage(Page page, SysRolePermission record);
-
-
+    
+    /**
+     * 通过角色uid删除
+     * @return
+     */
+    int deleteByRoleUid(String roleUid);
+    
+    /**
+     * 根据角色uid查询
+     * @param roleUid 实例对象
+     * @return 对象列表
+     */
+    List<String> selectByRoleUid(String roleUid);
+    
+    /**
+     * 角色权限更新
+     * @return
+     */
+    int sysRolePermissionReplace(SysRolePermissionDto record);
 }

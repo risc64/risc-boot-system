@@ -70,6 +70,20 @@ public interface SysPermissionService {
      * @return 对象列表
      */
     IPage<SysPermission> selectPage(Page page, SysPermission record);
+    
+    /**
+     * 分页查询-层级结构
+     * @param record 实例对象
+     * @return 对象列表
+     */
+    IPage<SysPermission> selectPageTree(Page page, SysPermission record);
+    
+    /**
+     * 条件查询-层级结构
+     * @param record 实例对象
+     * @return 对象列表
+     */
+    List<SysPermission> selectByPropertyTree(SysPermission record);
 
 
     /**

@@ -187,4 +187,57 @@ public class SysPermissionController {
     public Result<List<SysPermission>> deleteBatch(@RequestBody Token token) {
         return sysPermissionService.getMenuByRoleUid(token.getRoleUid());
     }
+    
+    /**
+     * 分页查询-层级结构
+     * @param page 分页信息
+     * @param record 实例对象
+     * @return 集合
+     */
+    @PreAuthorize("hasAuthority('sysPermission:query')")
+    @PostMapping(value = "sysPermission/query/page/tree", produces = "application/json;charset=UTF-8")
+    public Result<IPage<SysPermission>> selectPageTree(@ModelAttribute Page page, @RequestBody SysPermission record) {
+        Result<IPage<SysPermission>> result = new Result<>();
+        try {
+            if (page.getSize() == 0 ) {
+                page.setSize(10);
+                page.setCurrent(1);
+            }
+            IPage<SysPermission> t = sysPermissionService.selectPageTree(page, record);
+            if (t != null) {
+                result.setStatusEnum(StatusEnum.OK, t);
+            } else {
+                result.setStatusEnum(StatusEnum.NOT_DATA, null);
+            }
+        } catch (Exception e) {
+            result.exception(StatusEnum.EXCEPTION);
+            logger.error(ExceptionUtil.getErrorString(e));
+        }
+        return result;
+    }
+    
+    /**
+     * 条件查询-层级结构
+     * @param record 实例对象
+     * @return 集合
+     */
+    @PreAuthorize("hasAuthority('sysPermission:query')")
+    @PostMapping(value = "sysPermission/query/property/tree", produces = "application/json;charset=UTF-8")
+    public Result<List<SysPermission>> selectByPropertyTree(@RequestBody SysPermission record) {
+        Result<List<SysPermission>> result = new Result<>();
+        try {
+            List<SysPermission> list = sysPermissionService.selectByPropertyTree(record);
+            if (list != null && list.size() > 0)  {
+                result.setStatusEnum(StatusEnum.OK, list);
+            } else {
+                result.setStatusEnum(StatusEnum.NOT_DATA, null);
+            }
+        } catch (Exception e) {
+            result.exception(StatusEnum.EXCEPTION);
+            logger.error(ExceptionUtil.getErrorString(e));
+        }
+        return result;
+    }
+    
+    
 }

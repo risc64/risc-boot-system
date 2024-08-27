@@ -75,7 +75,27 @@ public interface SysPermissionDao {
      * @return 总页数
      */
     Long selectByPropertyCount(@Param("record") SysPermission record);
-
+    
+    /**
+     * 分页查询
+     * @param record 实例对象
+     * @return 对象列表
+     */
+    IPage<SysPermission> selectByPropertyTree(Page page, @Param("record") SysPermission record);
+    
+    /**
+     * 条件查询查询菜单--层级结构
+     * @return
+     */
+    List<SysPermission> selectByPropertyTree(@Param("record") SysPermission record);
+    
+    /**
+     * 分页查询 Count
+     * @param record 实例对象
+     * @return 总页数
+     */
+    Long selectByPropertyCountTree(@Param("record") SysPermission record);
+    
     /**
      * 通过uid集合查询所有
      * @return

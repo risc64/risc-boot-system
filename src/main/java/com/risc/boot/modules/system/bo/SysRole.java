@@ -2,6 +2,8 @@ package com.risc.boot.modules.system.bo;
 
 import java.util.Date;
 import java.io.Serializable;
+import java.util.List;
+
 import lombok.Data;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -48,6 +50,17 @@ public class SysRole implements Serializable {
     private Integer roleType;
     
     /**
+     * 数据权限
+     */
+    private String dataPermission;
+    
+    /**
+     * 数据权限切割
+     */
+    private List<String> dataPermissionList;
+    
+    
+    /**
     * 创建人uid
     */
     private String createUserUid;
@@ -71,6 +84,11 @@ public class SysRole implements Serializable {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone="GMT+8")
     private Date editTime;
     
-
-
+    
+    public List<String> getDataPermissionList() {
+        if(dataPermission != null) {
+            dataPermissionList = java.util.Arrays.asList(dataPermission.split(","));
+        }
+        return dataPermissionList;
+    }
 }

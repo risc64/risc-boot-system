@@ -1,6 +1,7 @@
 package com.risc.boot.modules.system.dao;
 
 import com.risc.boot.modules.system.bo.SysRolePermission;
+import com.risc.boot.modules.system.dto.SysRolePermissionDto;
 import org.apache.ibatis.annotations.Param;
 import java.util.List;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -89,4 +90,23 @@ public interface SysRolePermissionDao {
      * @return
      */
     List<String> selectPermissionUidByRoleUid(String roleUid);
+    
+    /**
+     * 通过角色uid删除
+     * @return
+     */
+    int deleteByRoleUid(String roleUid);
+    
+    /**
+     * 根据角色uid查询
+     * @param roleUid 实例对象
+     * @return 对象列表
+     */
+    List<String> selectByRoleUid(String roleUid);
+    
+    /**
+     * 角色权限新增
+     * @return
+     */
+    int replaceAdd(@Param("record") SysRolePermissionDto record);
 }

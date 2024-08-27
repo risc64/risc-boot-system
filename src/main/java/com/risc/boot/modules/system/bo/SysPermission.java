@@ -110,4 +110,6 @@ public class SysPermission implements Serializable {
      * 角色uid
      */
     private String roleUid;
+    
+    private String childUidStr;
 }

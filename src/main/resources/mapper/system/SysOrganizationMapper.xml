@@ -269,7 +269,9 @@
                 and uid = #{record.uid}
             </if>
             <if test="record.organizationName != null and record.organizationName != ''">
-                and organization_name like concat('%',#{record.organizationName},'%')
+                and (p.permission_name like concat('%',#{record.permissionName},'%') or
+                p.uid in (select parent_uid from sys_permission where permission_name like concat('%',#{record.permissionName},'%'))
+                )
             </if>
             <if test="record.organizationCode != null and record.organizationCode != ''">
                 and organization_code = #{record.organizationCode}

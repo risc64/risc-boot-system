@@ -115,6 +115,33 @@ public class SysPermissionServiceImpl implements SysPermissionService {
         page.setTotal(sysPermissionDao.selectByPropertyCount(record));
         return sysPermissionDao.selectByProperty(page, record);
     }
+    
+    /**
+     * 分页查询-层级结构
+     * @param record 实例对象
+     * @return 对象列表
+     */
+    @Override
+    public IPage<SysPermission> selectPageTree(Page page, SysPermission record) {
+        page.setSearchCount(false);
+        long total = sysPermissionDao.selectByPropertyCountTree(record);
+        page.setTotal(total);
+        if (total != 0) {
+            return sysPermissionDao.selectByPropertyTree(page, record);
+        } else {
+            return page;
+        }
+    }
+    
+    /**
+     * 条件查询-层级结构
+     * @param record 实例对象
+     * @return 对象列表
+     */
+    @Override
+    public List<SysPermission> selectByPropertyTree(SysPermission record) {
+        return sysPermissionDao.selectByPropertyTree(record);
+    }
 
     @Override
     public List<SysPermission> selectByUserUid(String userUid) {
@@ -195,5 +222,6 @@ public class SysPermissionServiceImpl implements SysPermissionService {
     public SysPermission selectByNameAndParentUid(String permissionName, String parentUid) {
         return sysPermissionDao.selectByNameAndParentUid(permissionName, parentUid);
     }
+    
     
 }
