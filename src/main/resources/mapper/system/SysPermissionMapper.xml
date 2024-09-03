@@ -446,7 +446,7 @@
             sys_permission.*,sys_role_permission.role_uid as role_uid
         from sys_permission
         right join sys_role_permission on sys_permission.uid = sys_role_permission.permission_uid
-        where sys_permission.parent_uid = #{uid} and sys_role_permission.role_uid = #{roleUid} and sys_permission.permission_type = 0
+        where sys_permission.parent_uid = #{uid} and sys_role_permission.role_uid = #{roleUid}
         order by sys_permission.sort
     </select>
 
@@ -520,7 +520,7 @@
         select sys_permission.*, sys_role_permission.role_uid as role_uid
         from sys_role_permission
         right outer join sys_permission on sys_permission.uid = sys_role_permission.permission_uid and parent_uid is null
-        where sys_role_permission.role_uid = #{roleUid} and sys_permission.permission_type = 0
+        where sys_role_permission.role_uid = #{roleUid}
         order by sys_permission.sort
     </select>
 
