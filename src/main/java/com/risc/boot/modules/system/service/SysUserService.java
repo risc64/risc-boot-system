@@ -58,6 +58,13 @@ public interface SysUserService {
     int deleteBatch(List<String> list);
     
     /**
+     * 逻辑删除
+     * @param list 主键集合
+     * @return 影响行数
+     */
+    int deleteBatchLogical(List<String> list, String updateUserUid);
+    
+    /**
      * 条件查询
      * @param record 实例对象
      * @return 对象列表
@@ -85,4 +92,20 @@ public interface SysUserService {
      * @return
      */
     Token selectTokenByUserName(String userName);
+    
+    
+    /**
+     * 新增、编辑用户名验重
+     * @param uid
+     * @param userName
+     * @return
+     */
+    SysUser checkUserName(String uid, String userName);
+    
+    /**
+     * 修改头像
+     * @param record 实例对象
+     * @return 影响行数
+     */
+    int updateProfilePicture(SysUser record);
 }

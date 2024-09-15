@@ -121,4 +121,9 @@ public class Token implements Serializable {
      * 头像地址
      */
     private String profilePicture;
+    
+    /**
+     * 状态（-1删除、0激活、1禁用、2待验证）
+     */
+    private Integer userStatus;
 }

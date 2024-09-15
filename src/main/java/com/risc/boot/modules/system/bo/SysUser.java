@@ -2,6 +2,8 @@ package com.risc.boot.modules.system.bo;
 
 import java.util.Date;
 import java.io.Serializable;
+import java.util.List;
+
 import lombok.Data;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -51,6 +53,13 @@ public class SysUser implements Serializable {
     * 性别（0男1女）
     */
     private Integer sex;
+    
+    /**
+     * 出生年月日
+     */
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd", timezone="GMT+8")
+    private Date birthday;
     
     /**
     * 状态（-1删除、0激活、1禁用、2待验证）
@@ -116,6 +125,28 @@ public class SysUser implements Serializable {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone="GMT+8")
     private Date updateTime;
     
-
+    /**
+    * 组织机构uid
+    */
+    private String organizationUid;
+    
+    /**
+     * 组织机构名称
+     */
+    private String organizationName;
+    
+    /**
+    * 角色uid
+    */
+    private String roleUid;
+    
+    /**
+     * 角色名称
+     */
+    private String roleName;
+    
+    private String selectName;
+    
+    private List<String> uidList;
 
 }

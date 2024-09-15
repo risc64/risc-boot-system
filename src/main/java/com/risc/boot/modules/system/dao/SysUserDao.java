@@ -57,6 +57,14 @@ public interface SysUserDao {
     int deleteBatch(List<String> list);
     
     /**
+     * 批量删除数据
+     * @param list
+     * @param updateUserUid
+     * @return
+     */
+    int deleteBatchLogical(@Param("list") List<String> list, @Param("updateUserUid") String updateUserUid);
+    
+    /**
      * 条件查询
      * @param record 实例对象
      * @return 对象列表
@@ -90,4 +98,19 @@ public interface SysUserDao {
      * @return
      */
     Token selectTokenByUserName(@Param("userName") String userName);
+    
+    /**
+     * 新增、编辑用户名验重
+     * @param uid
+     * @param userName
+     * @return
+     */
+    SysUser checkUserName(@Param("uid") String uid, @Param("userName") String userName);
+    
+    /**
+     * 修改头像
+     * @param record 实例对象
+     * @return 影响行数
+     */
+    int updateProfilePicture(@Param("record") SysUser record);
 }

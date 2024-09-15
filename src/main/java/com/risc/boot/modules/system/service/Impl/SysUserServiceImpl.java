@@ -2,8 +2,14 @@ package com.risc.boot.modules.system.service.Impl;
 
 import com.risc.boot.common.bo.Token;
 import com.risc.boot.modules.system.bo.SysUser;
+import com.risc.boot.modules.system.bo.SysUserOrganization;
+import com.risc.boot.modules.system.bo.SysUserRole;
 import com.risc.boot.modules.system.dao.SysUserDao;
+import com.risc.boot.modules.system.dao.SysUserOrganizationDao;
+import com.risc.boot.modules.system.dao.SysUserRoleDao;
 import com.risc.boot.modules.system.service.SysUserService;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -23,6 +29,15 @@ public class SysUserServiceImpl implements SysUserService {
 
     @Resource
     private SysUserDao sysUserDao;
+    
+    @Resource
+    private SysUserOrganizationDao sysUserOrganizationDao;
+    
+    @Resource
+    private SysUserRoleDao sysUserRoleDao;
+    
+    @Resource
+    PasswordEncoder passwordEncoder;
 
     /**
      * 通过ID查询单条数据
@@ -41,7 +56,24 @@ public class SysUserServiceImpl implements SysUserService {
      */
     @Override
     public int insert(SysUser record) {
-        return sysUserDao.insert(record);
+        if (StringUtils.isNotBlank(record.getPassWord())) {
+            String passwd = passwordEncoder.encode(record.getPassWord());
+            record.setPassWord(passwd);
+        }
+        int addRow = sysUserDao.insert(record);
+        if (StringUtils.isNotBlank(record.getOrganizationUid())) {
+            SysUserOrganization sysUserOrganization = new SysUserOrganization();
+            sysUserOrganization.setOrganizationUid(record.getOrganizationUid());
+            sysUserOrganization.setUserUid(record.getUid());
+            addRow += sysUserOrganizationDao.insert(sysUserOrganization);
+        }
+        if (StringUtils.isNotBlank(record.getRoleUid())) {
+            SysUserRole sysUserRole = new SysUserRole();
+            sysUserRole.setRoleUid(record.getRoleUid());
+            sysUserRole.setUserUid(record.getUid());
+            addRow += sysUserRoleDao.insert(sysUserRole);
+        }
+        return addRow;
     }
 
     /**
@@ -51,6 +83,24 @@ public class SysUserServiceImpl implements SysUserService {
      */
     @Override
     public int update(SysUser record) {
+        if (StringUtils.isNotBlank(record.getPassWord())) {
+            String passwd = passwordEncoder.encode(record.getPassWord());
+            record.setPassWord(passwd);
+        }
+        if (StringUtils.isNotBlank(record.getOrganizationUid())) {
+            SysUserOrganization sysUserOrganization = new SysUserOrganization();
+            sysUserOrganization.setOrganizationUid(record.getOrganizationUid());
+            sysUserOrganization.setUserUid(record.getUid());
+            sysUserOrganizationDao.deleteByKey(record.getUid());
+            sysUserOrganizationDao.insert(sysUserOrganization);
+       }
+        if (StringUtils.isNotBlank(record.getRoleUid())) {
+            SysUserRole sysUserRole = new SysUserRole();
+            sysUserRole.setRoleUid(record.getRoleUid());
+            sysUserRole.setUserUid(record.getUid());
+            sysUserRoleDao.deleteByKey(record.getUid());
+            sysUserRoleDao.insert(sysUserRole);
+       }
         return sysUserDao.update(record);
     }
 
@@ -84,6 +134,11 @@ public class SysUserServiceImpl implements SysUserService {
         return sysUserDao.deleteBatch(list);
     }
     
+    @Override
+    public int deleteBatchLogical(List<String> list, String updateUserUid) {
+        return sysUserDao.deleteBatchLogical(list, updateUserUid);
+    }
+    
     /**
      * 条件查询
      * @param record 实例对象
@@ -115,5 +170,15 @@ public class SysUserServiceImpl implements SysUserService {
     public Token selectTokenByUserName(String userName) {
         return sysUserDao.selectTokenByUserName(userName);
     }
-
+    
+    @Override
+    public SysUser checkUserName(String uid, String userName) {
+        return sysUserDao.checkUserName(uid, userName);
+    }
+    
+    @Override
+    public int updateProfilePicture(SysUser record) {
+        return sysUserDao.updateProfilePicture(record);
+    }
+    
 }

@@ -34,6 +34,15 @@ public interface SystemConstants {
      * JWT Token 前缀
      */
     String JWT_TOKEN_PREFIX = "Bearer ";
-
+    
+    /**
+     * 文件根路径
+     */
+    String FILE_ROOT_PATH = "/static";
+    
+    /**
+     * 头像路径
+     */
+    String PROFILE_PICTURE_PATH = "/profilePicture";
 
 }

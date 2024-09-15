@@ -88,6 +88,9 @@ public class LoginServiceImpl implements LoginService {
             } else if (!passwordEncoder.matches(record.getPassWord(), t.getPassWord())) {
                 result.setStatusEnum(StatusEnum.ERROR, null);
                 result.setMsg("用户名或密码错误");
+            } else if (t.getUserStatus() == null || t.getUserStatus() != 0) {
+                result.setStatusEnum(StatusEnum.ERROR, null);
+                result.setMsg("用户已锁定");
             } else {
                 List<SysPermission> sysPermissionList = sysPermissionService.selectByUserUid(t.getUserUid());
                 if (sysPermissionList == null || sysPermissionList.size() == 0) {

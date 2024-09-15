@@ -66,6 +66,7 @@ security:
       - /**/*.css
       - /**/*.png
       - /favicon.ico
+      - /static/**
 # 配置 rocketmq
 #rocketmq:
 #  name-server: 192.168.125.11:9876;192.168.125.12:9876;192.168.125.13:9876
