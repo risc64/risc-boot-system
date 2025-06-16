@@ -116,9 +116,10 @@ public class WordTest {
                 .build();
 
         // 渲染模板
-        XWPFTemplate template = XWPFTemplate.compile("/Users/liangfali/Desktop/template.docx", configure).render(data);
+        XWPFTemplate template1 = XWPFTemplate.compile("/Users/liangfali/Desktop/template.docx", configure).render(data);
+        XWPFTemplate template2 = XWPFTemplate.compile("/Users/liangfali/Desktop/template.docx", configure).render(data);
         try {
-            template.writeAndClose(new FileOutputStream("/Users/liangfali/Desktop/out.docx"));
+            template1.writeAndClose(new FileOutputStream("/Users/liangfali/Desktop/out.docx"));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
