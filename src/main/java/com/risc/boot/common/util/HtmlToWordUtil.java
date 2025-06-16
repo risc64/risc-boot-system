@@ -43,13 +43,33 @@ public class HtmlToWordUtil {
             List<Element> elements = document.body().children();
             for (Element element : elements) {
                 // 处理段落
-                if (element.tagName().equals("p")) {
+                if (element.tagName().equals("p") || element.tagName().matches("h[1-6]")) {
                     XWPFParagraph para = wordDocument.createParagraph();
                     // 检查该段落是否有子元素（如 <font> 标签），否则直接处理文本内容
                     if (element.children().isEmpty()) {
                         // 如果没有子元素，直接创建一个XWPFRun并添加文本
                         XWPFRun xwpfRun = para.createRun();
                         xwpfRun.setText(element.text(), 0); // 设置纯文本
+                        // **标题字体大小**
+                        if (element.tagName().equals("h1")) {
+                            xwpfRun.setBold(true);
+                            xwpfRun.setFontSize(24);
+                        } else if (element.tagName().equals("h2")) {
+                            xwpfRun.setBold(true);
+                            xwpfRun.setFontSize(20);
+                        } else if (element.tagName().equals("h3")) {
+                            xwpfRun.setBold(true);
+                            xwpfRun.setFontSize(18);
+                        } else if (element.tagName().equals("h4")) {
+                            xwpfRun.setBold(true);
+                            xwpfRun.setFontSize(16);
+                        } else if (element.tagName().equals("h5")) {
+                            xwpfRun.setBold(true);
+                            xwpfRun.setFontSize(16);
+                        } else if (element.tagName().equals("h6")) {
+                            xwpfRun.setBold(true);
+                            xwpfRun.setFontSize(16);
+                        }
                     } else {
                         // 如果有子元素，按之前的逻辑处理
                         List<Node> children = element.childNodes();
