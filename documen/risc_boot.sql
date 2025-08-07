@@ -1,21 +1,49 @@
 /*
  Navicat Premium Data Transfer
 
- Source Server         : localhost
+ Source Server         : local
  Source Server Type    : MySQL
- Source Server Version : 80035 (8.0.35)
+ Source Server Version : 80042 (8.0.42)
  Source Host           : localhost:3306
  Source Schema         : risc_boot
 
  Target Server Type    : MySQL
- Target Server Version : 80035 (8.0.35)
+ Target Server Version : 80042 (8.0.42)
  File Encoding         : 65001
 
- Date: 15/09/2024 12:12:39
+ Date: 07/08/2025 10:57:33
 */
 
 SET NAMES utf8mb4;
 SET FOREIGN_KEY_CHECKS = 0;
+
+-- ----------------------------
+-- Table structure for base_file
+-- ----------------------------
+DROP TABLE IF EXISTS `base_file`;
+CREATE TABLE `base_file` (
+  `uid` varchar(32) COLLATE utf8mb4_general_ci NOT NULL COMMENT '主键uid',
+  `show_name` varchar(50) COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '显示名',
+  `file_name` varchar(50) COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '文件名',
+  `file_path` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '文件路径',
+  `dfs_path` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT 'dfs文件路径',
+  `temp_flag` tinyint DEFAULT '0' COMMENT '临时文件标识（0 否   1是）',
+  `file_type` int DEFAULT '0' COMMENT '文件类型（0 通用文件  ）',
+  `create_user_uid` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '创建人uid',
+  `create_time` datetime DEFAULT NULL COMMENT '创建时间',
+  `update_user_uid` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '修改人uid',
+  `update_time` datetime DEFAULT NULL COMMENT '修改时间',
+  PRIMARY KEY (`uid`),
+  KEY `idx_file_name` (`file_name`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='文件表';
+
+-- ----------------------------
+-- Records of base_file
+-- ----------------------------
+BEGIN;
+INSERT INTO `base_file` (`uid`, `show_name`, `file_name`, `file_path`, `dfs_path`, `temp_flag`, `file_type`, `create_user_uid`, `create_time`, `update_user_uid`, `update_time`) VALUES ('0001', '123.docx', '1sd.docx', NULL, NULL, 0, 0, NULL, NULL, NULL, NULL);
+INSERT INTO `base_file` (`uid`, `show_name`, `file_name`, `file_path`, `dfs_path`, `temp_flag`, `file_type`, `create_user_uid`, `create_time`, `update_user_uid`, `update_time`) VALUES ('c3865a4d10c44e24987327e96344a925', '承办人.docx', '调解账号.docx', '/files/c3865a4d10c44e24987327e96344a925.docx', NULL, 0, 0, '0000', NULL, '0000', '2025-08-06 17:04:54');
+COMMIT;
 
 -- ----------------------------
 -- Table structure for sys_organization
@@ -75,7 +103,7 @@ CREATE TABLE `sys_permission` (
   `permission_type` int DEFAULT NULL COMMENT '权限类型（0菜单、1操作）',
   `request_method` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '请求方式(如GET,POST,PUT,DELETE)',
   `menu_url` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '菜单路径（前端路由）',
-  `menu_component` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '前端页面',
+  `menu_component` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '前端页面',
   `permission_level` int DEFAULT NULL COMMENT '权限等级',
   `sort` int DEFAULT NULL COMMENT '排序',
   `icon_style` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '图标样式',
@@ -92,6 +120,12 @@ CREATE TABLE `sys_permission` (
 BEGIN;
 INSERT INTO `sys_permission` (`uid`, `parent_uid`, `permission_name`, `permission_code`, `permission_type`, `request_method`, `menu_url`, `menu_component`, `permission_level`, `sort`, `icon_style`, `create_user_uid`, `create_time`, `edit_user_uid`, `edit_time`) VALUES ('001', NULL, '首页', 'home', 0, NULL, '/home', 'home/Home.vue', NULL, 1, 'home', NULL, NULL, NULL, NULL);
 INSERT INTO `sys_permission` (`uid`, `parent_uid`, `permission_name`, `permission_code`, `permission_type`, `request_method`, `menu_url`, `menu_component`, `permission_level`, `sort`, `icon_style`, `create_user_uid`, `create_time`, `edit_user_uid`, `edit_time`) VALUES ('001-01', '001', '首页', 'home', 0, NULL, '/home', 'home/Home.vue', NULL, 1, 'home', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_permission` (`uid`, `parent_uid`, `permission_name`, `permission_code`, `permission_type`, `request_method`, `menu_url`, `menu_component`, `permission_level`, `sort`, `icon_style`, `create_user_uid`, `create_time`, `edit_user_uid`, `edit_time`) VALUES ('998', NULL, '基础数据', 'baseData', 0, NULL, '/base', 'layout/index.vue', NULL, 998, 'system', NULL, '2024-08-09 16:35:12', NULL, NULL);
+INSERT INTO `sys_permission` (`uid`, `parent_uid`, `permission_name`, `permission_code`, `permission_type`, `request_method`, `menu_url`, `menu_component`, `permission_level`, `sort`, `icon_style`, `create_user_uid`, `create_time`, `edit_user_uid`, `edit_time`) VALUES ('998-01', '998', '文件管理', 'baseFile', 0, NULL, '/base/baseFile', 'base/BaseFile.vue', NULL, 1, 'file', NULL, '2024-08-09 16:35:12', NULL, NULL);
+INSERT INTO `sys_permission` (`uid`, `parent_uid`, `permission_name`, `permission_code`, `permission_type`, `request_method`, `menu_url`, `menu_component`, `permission_level`, `sort`, `icon_style`, `create_user_uid`, `create_time`, `edit_user_uid`, `edit_time`) VALUES ('998-01-01', '998-01', '查询', 'baseFile:query', 1, NULL, NULL, NULL, NULL, 1, NULL, NULL, '2024-08-09 16:35:12', NULL, NULL);
+INSERT INTO `sys_permission` (`uid`, `parent_uid`, `permission_name`, `permission_code`, `permission_type`, `request_method`, `menu_url`, `menu_component`, `permission_level`, `sort`, `icon_style`, `create_user_uid`, `create_time`, `edit_user_uid`, `edit_time`) VALUES ('998-01-02', '998-01', '新增', 'baseFile:add', 1, NULL, NULL, NULL, NULL, 2, NULL, NULL, '2024-08-09 16:35:12', NULL, NULL);
+INSERT INTO `sys_permission` (`uid`, `parent_uid`, `permission_name`, `permission_code`, `permission_type`, `request_method`, `menu_url`, `menu_component`, `permission_level`, `sort`, `icon_style`, `create_user_uid`, `create_time`, `edit_user_uid`, `edit_time`) VALUES ('998-01-03', '998-01', '修改', 'baseFile:update', 1, NULL, NULL, NULL, NULL, 3, NULL, NULL, '2024-08-09 16:35:12', NULL, NULL);
+INSERT INTO `sys_permission` (`uid`, `parent_uid`, `permission_name`, `permission_code`, `permission_type`, `request_method`, `menu_url`, `menu_component`, `permission_level`, `sort`, `icon_style`, `create_user_uid`, `create_time`, `edit_user_uid`, `edit_time`) VALUES ('998-01-04', '998-01', '删除', 'baseFile:delete', 1, NULL, NULL, NULL, NULL, 4, NULL, NULL, '2024-08-09 16:35:12', NULL, NULL);
 INSERT INTO `sys_permission` (`uid`, `parent_uid`, `permission_name`, `permission_code`, `permission_type`, `request_method`, `menu_url`, `menu_component`, `permission_level`, `sort`, `icon_style`, `create_user_uid`, `create_time`, `edit_user_uid`, `edit_time`) VALUES ('999', NULL, '用户权限', 'authUser', 0, NULL, '/authUser', 'layout/index.vue', NULL, 999, 'system', NULL, '2024-08-09 16:35:12', NULL, NULL);
 INSERT INTO `sys_permission` (`uid`, `parent_uid`, `permission_name`, `permission_code`, `permission_type`, `request_method`, `menu_url`, `menu_component`, `permission_level`, `sort`, `icon_style`, `create_user_uid`, `create_time`, `edit_user_uid`, `edit_time`) VALUES ('999-01', '999', '角色管理', 'sysRole', 0, NULL, '/authUser/sysRole', 'system/SysRole.vue', NULL, 1, 'peoples', NULL, '2024-08-09 16:35:12', NULL, NULL);
 INSERT INTO `sys_permission` (`uid`, `parent_uid`, `permission_name`, `permission_code`, `permission_type`, `request_method`, `menu_url`, `menu_component`, `permission_level`, `sort`, `icon_style`, `create_user_uid`, `create_time`, `edit_user_uid`, `edit_time`) VALUES ('999-01-01', '999-01', '查询', 'sysRole:query', 1, NULL, NULL, NULL, NULL, 1, NULL, NULL, '2024-08-09 16:35:12', NULL, NULL);
@@ -126,7 +160,7 @@ CREATE TABLE `sys_role` (
   `description` varchar(1000) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '描述',
   `deleteable_flag` tinyint DEFAULT '1' COMMENT '(0表示不可删除 1表示可删除）',
   `role_type` int DEFAULT NULL COMMENT '角色类型(0代表超级管理员  1其他)',
-  `data_permission` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '数据权限',
+  `data_permission` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '数据权限',
   `create_user_uid` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '创建人uid',
   `create_time` datetime DEFAULT NULL COMMENT '创建时间',
   `edit_user_uid` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '修改人uid',
@@ -157,6 +191,12 @@ CREATE TABLE `sys_role_permission` (
 -- Records of sys_role_permission
 -- ----------------------------
 BEGIN;
+INSERT INTO `sys_role_permission` (`role_uid`, `permission_uid`) VALUES ('0000', '998');
+INSERT INTO `sys_role_permission` (`role_uid`, `permission_uid`) VALUES ('0000', '998-01');
+INSERT INTO `sys_role_permission` (`role_uid`, `permission_uid`) VALUES ('0000', '998-01-01');
+INSERT INTO `sys_role_permission` (`role_uid`, `permission_uid`) VALUES ('0000', '998-01-02');
+INSERT INTO `sys_role_permission` (`role_uid`, `permission_uid`) VALUES ('0000', '998-01-03');
+INSERT INTO `sys_role_permission` (`role_uid`, `permission_uid`) VALUES ('0000', '998-01-04');
 INSERT INTO `sys_role_permission` (`role_uid`, `permission_uid`) VALUES ('0000', '999');
 INSERT INTO `sys_role_permission` (`role_uid`, `permission_uid`) VALUES ('0000', '999-01');
 INSERT INTO `sys_role_permission` (`role_uid`, `permission_uid`) VALUES ('0000', '999-01-01');
