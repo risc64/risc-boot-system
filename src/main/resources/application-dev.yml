@@ -8,7 +8,7 @@ spring:
     type: com.zaxxer.hikari.HikariDataSource
     url: jdbc:mysql://localhost:3306/risc_boot?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&useSSL=false&allowMultiQueries=true
     username: root
-    password: Abc@1234
+    password: Llf@1990
     hikari:
       minimum-idle: 5
       maximum-pool-size: 5
@@ -29,7 +29,7 @@ spring:
   redis:
     host: localhost
     port: 6379
-    password: 123abc
+    password: Llf@1990
     database: 0
     lettuce:
       pool:
@@ -75,6 +75,7 @@ security:
       - /favicon.ico
       - /test/**
       - /static/**
+      - /wopi/files/**
 # 配置 rocketmq
 #rocketmq:
 #  name-server: 192.168.125.11:9876;192.168.125.12:9876;192.168.125.13:9876
@@ -125,3 +126,7 @@ captcha:
     size: 24
   # 验证码有效期(秒)
   expire-seconds: 120
+# 系统配置
+system:
+  config:
+    collaboraUrl: http://localhost:9980/

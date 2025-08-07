@@ -67,6 +67,7 @@ security:
       - /**/*.png
       - /favicon.ico
       - /static/**
+      - /wopi/files/**
 # 配置 rocketmq
 #rocketmq:
 #  name-server: 192.168.125.11:9876;192.168.125.12:9876;192.168.125.13:9876
@@ -117,3 +118,7 @@ captcha:
     size: 24
   # 验证码有效期(秒)
   expire-seconds: 120
+# 系统配置
+system:
+  config:
+    collaboraUrl: https://localhost:9980/

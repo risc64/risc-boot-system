@@ -45,4 +45,9 @@ public interface SystemConstants {
      */
     String PROFILE_PICTURE_PATH = "/profilePicture";
 
+    /**
+     * 文件路径
+     */
+    String BASE_FILE_PATH = "/files";
+
 }

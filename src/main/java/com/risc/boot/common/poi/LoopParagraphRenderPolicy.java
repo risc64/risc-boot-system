@@ -8,6 +8,7 @@ import com.deepoove.poi.data.style.Style;
 import com.deepoove.poi.policy.AbstractRenderPolicy;
 import com.deepoove.poi.render.RenderContext;
 import org.apache.poi.xwpf.usermodel.*;
+import org.apache.xmlbeans.XmlCursor;
 
 import java.util.List;
 
@@ -25,8 +26,10 @@ public class LoopParagraphRenderPolicy extends AbstractRenderPolicy<List<Paragra
         XWPFParagraph refParagraph = placeholderRun.getParagraph();
         IBody body = refParagraph.getBody();
 
+        XmlCursor cursor = refParagraph.getCTP().newCursor();
+
         for (ParagraphRenderData paraData : data) {
-            XWPFParagraph newPara = body.insertNewParagraph(refParagraph.getCTP().newCursor());
+            XWPFParagraph newPara = body.insertNewParagraph(cursor);
             newPara.getCTP().setPPr(refParagraph.getCTP().getPPr()); // 可选：复制样式
 
             ParagraphStyle paraStyle = paraData.getParagraphStyle();
@@ -59,6 +62,7 @@ public class LoopParagraphRenderPolicy extends AbstractRenderPolicy<List<Paragra
                 ((XWPFDocument) body).removeBodyElement(pos);
             }
         }
+        clearPlaceholder(context, true);
     }
 
     @Override

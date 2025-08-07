@@ -2,6 +2,7 @@ package com.risc.boot.test;
 
 import com.deepoove.poi.XWPFTemplate;
 import com.deepoove.poi.config.Configure;
+import com.deepoove.poi.config.ConfigureBuilder;
 import com.deepoove.poi.data.*;
 import com.deepoove.poi.data.style.ParagraphStyle;
 import com.deepoove.poi.data.style.Style;
@@ -12,13 +13,10 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.*;
 
-import com.deepoove.poi.plugin.table.LoopRowTableRenderPolicy;
-import com.deepoove.poi.policy.ParagraphRenderPolicy;
-import com.deepoove.poi.policy.PictureRenderPolicy;
-import com.deepoove.poi.policy.TableRenderPolicy;
+import com.deepoove.poi.util.RegexUtils;
 import com.deepoove.poi.xwpf.XWPFHighlightColor;
 import com.risc.boot.common.poi.LoopParagraphRenderPolicy;
-import com.risc.boot.modules.system.bo.SysUser;
+import com.risc.boot.common.poi.StaticTextPolicy;
 import org.apache.poi.xwpf.usermodel.ParagraphAlignment;
 import org.junit.Test;
 
@@ -102,6 +100,19 @@ public class WordTest {
         personInfo.add(personInfo1);
         personInfo.add(personInfo2);
 
+        String str1 = "1.《人民币流动资金贷款合同》第四条约定：贷款利率为年利率5.22%；利率调整采用固定利率，贷款期内利率保持不变；逾期还款的，在前述贷款利率基础上加收50%作为罚息；" +
+                "   2.《某某合作协议》项下的融资利率采用固定利率，为年化单利3.75%和3.95%，逾期还款的，在前述贷款利率基础上加收50%作为罚息；" +
+                "   3.《某某银行电子银行承兑汇票承兑协议》项下第十条约定：某某公司未能按本协议约定及时支付票款/补足保证金致使某某福州分行发生垫款的，某某福州分行可以要求某某公司立即支付应付的票款，并自某某银行垫款之日起，以中信福州分行垫款金额为基数，按日利率0.05％的计息标准向某某银行计收罚息，直至某某公司付清某某福州分行全部垫款；\n" +
+                "   4.《某某银行贷款合同》第十五条约定，自逾期之日起，按贷款合同总额5%的标准支付违约金。";
+
+        List<ParagraphRenderData> list1 = getList(str1);
+
+        String str2 = "2023年1月1日，被告福建某某股份有限公司与原告某某银行股份有限公司福州分行在福州市鼓楼区签订了编号为（2023）某某贷字第2023001号《综合授信合同》。\n" +
+                "2023年1月1日，被告XXX与原告XXX在福州市鼓楼区签订了《XXX抵押合同》。";
+        List<ParagraphRenderData> list2 = getList(str2);
+
+        String str3 = "原告";
+
         // 数据替换
         Map<String, Object> data = new HashMap<>();
         data.put("name", Texts.of("张三").style(textStyle).create());
@@ -110,18 +121,38 @@ public class WordTest {
         data.put("photo", picture);
         data.put("table", table);
         data.put("人员信息", personInfo);
+        data.put("2.1利息、罚息、复利、违约金及其暂计日", "请求判令被告林某某、福建某某有限公司向原告支付截至2025年1月1日尚欠利息12345元、罚息1234元、复利123元、违约金4321元");
+        data.put("81请求合同依据", str1);
+        data.put("11合同签订情况", str2);
+        data.put("12主债权合同名称", "编号为（2023）某某贷字第2023001号《综合授信合同》");
+        data.put("原告", "福建某某股份有限公司");
+        data.put("被告", "李四");
+        data.put("案由", "22323");
 
-        Configure configure = Configure.builder()
-                .bind("人员信息", new LoopParagraphRenderPolicy())
-                .build();
+        ConfigureBuilder builder = Configure.builder();
+        builder.bind("人员信息", new LoopParagraphRenderPolicy());
+//        builder.bind("81请求合同依据", new LoopParagraphRenderPolicy());
+//        builder.bind("11合同签订情况", new LoopParagraphRenderPolicy());
+//        builder.bind("@2.1利息、罚息、复利、违约金及其暂计日", new StaticTextPolicy("2.1利息、罚息、复利、违约金及其暂计日"));
 
         // 渲染模板
-        XWPFTemplate template1 = XWPFTemplate.compile("/Users/liangfali/Desktop/template.docx", configure).render(data);
-        XWPFTemplate template2 = XWPFTemplate.compile("/Users/liangfali/Desktop/template.docx", configure).render(data);
+        XWPFTemplate template1 = XWPFTemplate.compile("/Users/liangfali/Desktop/template.docx", builder.build()).render(data);
+//        XWPFTemplate template2 = XWPFTemplate.compile("/Users/liangfali/Desktop/template.docx", configure).render(data);
         try {
             template1.writeAndClose(new FileOutputStream("/Users/liangfali/Desktop/out.docx"));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public static List<ParagraphRenderData> getList(String str) {
+        List<ParagraphRenderData> list = new ArrayList<>();
+        String[] split = str.split("\n");
+        for (String s : split) {
+            ParagraphRenderData paragraphRenderData = new ParagraphRenderData();
+            paragraphRenderData.addText(s);
+            list.add(paragraphRenderData);
+        }
+        return list;
     }
 }
